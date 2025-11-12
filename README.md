@@ -49,3 +49,4 @@ pip install flask flask_sqlalchemy
 
 ## Rodar aplicação
 python app.py
+
