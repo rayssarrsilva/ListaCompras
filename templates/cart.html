@@ -1,0 +1,7 @@
+<h1>Carrinho</h1>
+<ul>
+    {% for cart_item in cart_items %}
+        <li>{{ cart_item.item.name }} (Adicionado {{ cart_item.item.frequency }}x)</li>
+    {% endfor %}
+</ul>
+<a href="/">Voltar</a>

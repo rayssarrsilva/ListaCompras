@@ -1,0 +1,10 @@
+CREATE TABLE item (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    frequency INTEGER DEFAULT 0
+);
+
+CREATE TABLE cart (
+    id SERIAL PRIMARY KEY,
+    item_id INTEGER REFERENCES item(id)
+);
