@@ -1,19 +1,25 @@
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from models import db, Item, Cart
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin
+from models import db, Item, Cart, User, UserRoles, Role
 import config
 from flask_migrate import Migrate
-
-db = SQLAlchemy()
 
 #cconfiguração do flask, sqlalchemy e rotas web
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
     app.config['SECRET_KEY'] = config.SECRET_KEY
+    app.config['SECURITY_PASSWORD_SALT'] = 'um_salt_seguro'
+    app.config['SECURITY_REGISTERABLE'] = True
+    app.config['SECURITY_RECOVERABLE'] = True
+    app.config['SECURITY_TRACKABLE'] = True
 
     db.init_app(app)
-    Migrate(app, db)
+    migrate = Migrate(app, db)
+
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security = Security(app, user_datastore)
 
     # rotas ficam dentro da função
     @app.route('/')
@@ -81,5 +87,8 @@ def create_app():
             db.session.add(item)
         db.session.commit()
         return redirect(url_for('index'))
-
+    
+    # Configuração do Flask-Security
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)    
     return app
+
