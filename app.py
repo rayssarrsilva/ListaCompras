@@ -2,15 +2,17 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from models import db, Item, Cart
 import config, os 
 from flask import jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
+db = SQLAlchemy() #separa a criação do objeto db da inicialização do app
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
 app.config['SECRET_KEY'] = config.SECRET_KEY
-db.init_app(app)
 
-with app.app_context():
-    db.create_all()
+db.init_app(app)
+migrate = Migrate(app, db)
 
 @app.route('/')
 def index():
