@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 from models import db, Item, Cart
 import config, os 
+from flask import jsonify
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
@@ -36,6 +38,16 @@ def delete_cart(cart_id):
     db.session.commit()
     return redirect(url_for('index'))  # volta para a página inicial
 
+@app.route('/api/itens/<int:item_id>', methods=['DELETE'])
+def delete_item(item_id):
+    item = Item.query.get(item_id)
+    if not item:
+        return {"error": "Item não encontrado"}, 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return {"success": True}
+
 @app.route('/select_cart', methods=['POST'])
 def select_cart():
     cart_id = request.form['cart_id']
@@ -49,6 +61,15 @@ def add_to_cart(cart_id):
     db.session.add(item)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/api/carrinhos/<int:cart_id>/itens')
+def get_cart_items(cart_id):
+    cart = Cart.query.get(cart_id)
+    if not cart:
+        return jsonify({"error": "Carrinho não encontrado"}), 404
+    
+    items = Item.query.filter_by(cart_id=cart_id).all()
+    return jsonify([{"id": item.id, "name": item.name} for item in items])
 
 @app.route('/add_bulk/<int:cart_id>', methods=['POST'])
 def add_bulk(cart_id):

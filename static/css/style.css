@@ -284,43 +284,69 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: url('/static/seu-pergaminho.png') no-repeat center center;
-  background-size: contain;
-  padding: 30px;
-  border: 2px solid #c2a76d;
+  background: url('/static/pergaminho.png') no-repeat center center;
+  background-size: 100% 100%;
+  padding: 40px 30px;
+  border: none;
   border-radius: 12px;
-  max-width: 90vw;
+  max-width: 500px;
+  width: 90vw;
   max-height: 80vh;
   overflow-y: auto;
   z-index: 1000;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
   font-family: 'MedievalSharp', cursive;
   color: #3e2f1c;
+  display: none;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
 #pergaminho-modal h3 {
-  margin-top: 0;
-  font-size: 24px;
   text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 #pergaminho-modal ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 #pergaminho-modal li {
   font-size: 18px;
   margin-bottom: 8px;
+  text-align: center;
 }
 
 #fechar-pergaminho {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: transparent;
+  background: rgba(255,255,255,0.6);
   border: none;
   font-size: 20px;
   cursor: pointer;
   color: #3e2f1c;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.delete-item-btn {
+  margin-left: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #8b0000;
+  transition: transform 0.2s ease;
+}
+
+.delete-item-btn:hover {
+  transform: scale(1.2);
 }

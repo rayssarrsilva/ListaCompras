@@ -8,19 +8,16 @@ function toggleSelect(cartId, cartName) {
     const manageContainer = document.getElementById("manage-container");
 
     if (selectedCarts.has(cartId)) {
-        // desseleciona
         selectedCarts.delete(cartId);
         card.classList.remove('selected');
         dot.classList.remove('active');
         const box = document.getElementById(`manage-${cartId}`);
         if (box) box.remove();
     } else {
-        // seleciona
         selectedCarts.add(cartId);
         card.classList.add('selected');
         dot.classList.add('active');
 
-        // cria quadrinho flutuante
         const box = document.createElement("div");
         box.className = "manage-cart";
         box.id = `manage-${cartId}`;
@@ -42,13 +39,13 @@ function toggleSelect(cartId, cartName) {
     }
 }
 
-// Mostrar / esconder itens do carrinho
-function toggleView(cartId) {
+// Mostrar/esconder itens simples (não o pergaminho)
+function toggleItemList(cartId) {
     const itemsDiv = document.getElementById(`items-${cartId}`);
     itemsDiv.style.display = itemsDiv.style.display === 'none' ? 'block' : 'none';
 }
 
-// Finalizar carrinho (remove quadrinho e desseleciona)
+// Finalizar carrinho
 function finalizeSelection(cartId) {
     selectedCarts.delete(cartId);
     document.getElementById(`cart-${cartId}`).classList.remove('selected');
@@ -73,7 +70,7 @@ function handleNavAction(action) {
         return;
     }
 
-    const cartId = Array.from(selectedCarts)[0]; // pega o primeiro selecionado
+    const cartId = Array.from(selectedCarts)[0];
 
     if (action === "view") {
         window.location.href = "/cart/" + cartId;
@@ -82,7 +79,7 @@ function handleNavAction(action) {
     } else if (action === "delete") {
         const skipConfirm = localStorage.getItem("skipDeleteConfirm");
         if (skipConfirm === "true") {
-            confirmDelete(cartId); // ✅ agora chama a função que faz POST
+            confirmDelete(cartId);
             return;
         }
 
@@ -100,23 +97,21 @@ function handleNavAction(action) {
     }
 }
 
-// Confirmar exclusão (POST real para backend)
+// Confirmar exclusão
 function confirmDelete(cartId) {
     const skip = document.getElementById("skipConfirm")?.checked;
     if (skip) localStorage.setItem("skipDeleteConfirm", "true");
 
-    fetch(`/delete/${cartId}`, {
-        method: "POST"
-    })
-    .then(response => {
-        if (response.ok) {
-            showPopup(`🗑️ Carrinho ${cartId} deletado com sucesso!`);
-            finalizeSelection(cartId);
-        } else {
-            showPopup("❌ Erro ao deletar carrinho.");
-        }
-    })
-    .catch(() => showPopup("❌ Erro de conexão com o servidor."));
+    fetch(`/delete/${cartId}`, { method: "POST" })
+        .then(response => {
+            if (response.ok) {
+                showPopup(`🗑️ Carrinho ${cartId} deletado com sucesso!`);
+                finalizeSelection(cartId);
+            } else {
+                showPopup("❌ Erro ao deletar carrinho.");
+            }
+        })
+        .catch(() => showPopup("❌ Erro de conexão com o servidor."));
 
     cancelDelete(document.querySelector(".popup-confirm .actions button:last-child"));
 }
@@ -126,34 +121,63 @@ function cancelDelete(el) {
     el.closest(".popup-confirm").remove();
 }
 
-// expõe funções no escopo global (garante que onclick funcione)
-window.toggleSelect = toggleSelect;
-window.toggleView = toggleView;
-window.finalizeSelection = finalizeSelection;
-window.handleNavAction = handleNavAction;
+// Abrir pergaminho com itens
+function abrirPergaminho(cartId) {
+    const modal = document.getElementById('pergaminho-modal');
+    const overlay = document.getElementById('pergaminho-overlay');
+    const lista = document.getElementById('lista-itens-modal');
+    const som = document.getElementById('som-pergaminho');
 
-// Modal do Pergaminho
-function toggleView(cartId) {
-  const modal = document.getElementById('pergaminho-modal');
-  const lista = document.getElementById('lista-itens-modal');
-  const som = document.getElementById('som-pergaminho');
+    lista.innerHTML = '';
 
-  lista.innerHTML = '';
+    fetch(`/api/carrinhos/${cartId}/itens`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
 
-  fetch(`/api/carrinhos/${cartId}/itens`)
-    .then(res => res.json())
-    .then(data => {
-      data.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item.name;
-        lista.appendChild(li);
-      });
+                const btn = document.createElement('button');
+                btn.textContent = '🗑️';
+                btn.className = 'delete-item-btn';
+                btn.onclick = () => deletarItem(item.id, li);
 
-      modal.style.display = 'block';
-      som.play();
-    });
+                li.appendChild(btn);
+                lista.appendChild(li);
+            });
+
+            overlay.style.display = 'block';
+            modal.style.display = 'block';
+            som.play();
+        });
 }
 
-document.getElementById('fechar-pergaminho').addEventListener('click', () => {
-  document.getElementById('pergaminho-modal').style.display = 'none';
+// Deletar item específico
+function deletarItem(itemId, liElement) {
+    fetch(`/api/itens/${itemId}`, { method: 'DELETE' })
+        .then(res => {
+            if (res.ok) {
+                liElement.remove();
+            } else {
+                alert("Erro ao deletar item.");
+            }
+        });
+}
+
+// Fechar pergaminho
+document.addEventListener("DOMContentLoaded", function () {
+    const fecharBtn = document.getElementById('fechar-pergaminho');
+    if (fecharBtn) {
+        fecharBtn.addEventListener('click', () => {
+            document.getElementById('pergaminho-modal').style.display = 'none';
+            document.getElementById('pergaminho-overlay').style.display = 'none';
+        });
+    }
 });
+
+// expõe funções globais
+window.toggleSelect = toggleSelect;
+window.toggleItemList = toggleItemList;
+window.finalizeSelection = finalizeSelection;
+window.handleNavAction = handleNavAction;
+window.abrirPergaminho = abrirPergaminho;
