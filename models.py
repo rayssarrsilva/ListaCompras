@@ -11,4 +11,5 @@ class Item(db.Model):
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)  # nome do carrinho
+    status = db.Column(db.String(20), default="open", nullable=False)  # novo campo
     items = db.relationship('Item', backref='cart', lazy=True, cascade="all, delete")
