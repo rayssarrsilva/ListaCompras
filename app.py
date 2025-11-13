@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from models import db, Item, Cart, User, UserRoles, Role
 import config
 from flask_migrate import Migrate
@@ -14,6 +14,7 @@ def create_app():
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_RECOVERABLE'] = True
     app.config['SECURITY_TRACKABLE'] = True
+    app.config['SECURITY_RENDER_TEMPLATE_EXT'] = '.html'
 
     db.init_app(app)
     migrate = Migrate(app, db)
@@ -23,6 +24,7 @@ def create_app():
 
     # rotas ficam dentro da função
     @app.route('/')
+    @login_required
     def index():
         carts = Cart.query.all()
         selected_cart = None
