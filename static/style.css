@@ -1,7 +1,326 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
-h1 {
-    color: #333333;
+
+/* Fundo branco com detalhes em amarelo */
+body {
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Barra de navegação */
+.navbar {
+    background-color: #ffcc00; /* amarelo Mercado Livre */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #000;
+}
+
+/* Formulário */
+.form-section {
+    margin: 30px auto;
+    text-align: center;
+}
+
+.add-form input {
+    padding: 10px;
+    width: 250px;
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.add-form button {
+    padding: 10px 20px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.add-form button:hover {
+    background-color: #ffd633;
+}
+
+/* Cards dos carrinhos */
+.carts-section {
+    padding: 20px 40px;
+}
+
+.carts-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.carts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.cart-card {
+    background-color: #fffbea;
+    border: 1px solid #ffcc00;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.cart-card:hover {
+    transform: translateY(-5px);
+}
+
+.cart-icon {
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+.cart-card h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Botões */
+.btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #ffcc00;
+    color: #333;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #ffd633;
+}
+
+.btn.edit {
+    background-color: #ffe066;
+}
+
+.btn.delete {
+    background-color: #ff9999;
+    color: #fff;
+}
+
+.btn.delete:hover {
+    background-color: #ff6666;
+}
+
+/* Bolinha de status */
+.status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 8px;
+    border-radius: 50%;
+    background-color: #ccc; /* cinza quando não selecionado */
+    vertical-align: middle;
+}
+
+.status-dot.active {
+    background-color: #ffcc00; /* amarelo Mercado Livre */
+}
+
+/* Container dos quadrinhos flutuantes */
+#manage-container {
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* espaçamento elegante entre quadrinhos */
+    z-index: 1000;
+}
+
+/* Quadrinho flutuante de gerenciar carrinho */
+.manage-cart {
+    width: 320px;
+    background-color: #fffbea;
+    border: 1px solid #ffcc00;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.manage-cart h2 {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Formulários compactos dentro do quadrinho */
+.add-form.compact {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.add-form.compact input,
+.add-form.compact textarea {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ffcc00;
+    border-radius: 5px;
+}
+
+.add-form.compact button {
+    padding: 8px 15px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-form.compact button:hover {
+    background-color: #ffd633;
+}
+
+/* Animação suave para quadrinhos */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Popup de aviso */
+.popup-warning {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ffcc00;
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 2000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Popup de confirmação */
+.popup-confirm {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fffbea;
+    border: 2px solid #ffcc00;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 2000;
+    width: 300px;
+    text-align: center;
+}
+
+.popup-confirm p {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.popup-confirm .actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+.popup-confirm button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.popup-confirm button:first-child {
+    background-color: #ffcc00;
+    color: #333;
+}
+
+.popup-confirm button:last-child {
+    background-color: #ff9999;
+    color: #fff;
+}
+#pergaminho-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url('/static/seu-pergaminho.png') no-repeat center center;
+  background-size: contain;
+  padding: 30px;
+  border: 2px solid #c2a76d;
+  border-radius: 12px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  font-family: 'MedievalSharp', cursive;
+  color: #3e2f1c;
+}
+
+#pergaminho-modal h3 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+#pergaminho-modal ul {
+  list-style: none;
+  padding: 0;
+}
+
+#pergaminho-modal li {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+#fechar-pergaminho {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #3e2f1c;
 }
