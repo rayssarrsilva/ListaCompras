@@ -13,17 +13,34 @@
                 <p>Crie sua conta para começar a organizar seus carrinhos.</p>
             </div>
 
+            <!-- MENSAGENS FLASH -->
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="flash-messages">
+                  {% for message in messages %}
+                    <li class="flash-error">{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
             <form action="{{ url_for('security.register') }}" method="POST" class="register-form">
                 {{ register_user_form.hidden_tag() }}
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     {{ register_user_form.email(class="form-control", placeholder="Digite seu email") }}
+                    {% for error in register_user_form.email.errors %}
+                        <span class="field-error">{{ error }}</span>
+                    {% endfor %}
                 </div>
 
                 <div class="form-group">
                     <label for="password">Senha</label>
                     {{ register_user_form.password(class="form-control", placeholder="Crie uma senha") }}
+                    {% for error in register_user_form.password.errors %}
+                        <span class="field-error">{{ error }}</span>
+                    {% endfor %}
                 </div>
 
                 <button type="submit" class="btn-register">Registrar</button>

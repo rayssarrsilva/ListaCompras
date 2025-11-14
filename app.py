@@ -15,7 +15,13 @@ def create_app():
     app.config['SECURITY_RECOVERABLE'] = True
     app.config['SECURITY_TRACKABLE'] = True
     app.config['SECURITY_RENDER_TEMPLATE_EXT'] = '.html'
-
+    app.config['SECURITY_FLASH_MESSAGES'] = True
+    app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # se não quiser email de confirmação
+    app.config['SECURITY_POST_REGISTER_VIEW'] = '/login'  # ou qualquer rota de sucesso
+    app.config['SECURITY_POST_LOGOUT_VIEW'] = '/login'
+    
+    
+    
     db.init_app(app)
     migrate = Migrate(app, db)
 
@@ -90,7 +96,5 @@ def create_app():
         db.session.commit()
         return redirect(url_for('index'))
     
-    # Configuração do Flask-Security
-    user_datastore = SQLAlchemyUserDatastore(db, User, Role)    
     return app
 
