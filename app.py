@@ -19,7 +19,7 @@ def create_app():
     app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # se não quiser email de confirmação
     
     app.config['SECURITY_POST_REGISTER_VIEW'] = 'security.login'
-    app.config['SECURITY_POST_LOGOUT_VIEW'] = '/login'
+    app.config['SECURITY_POST_LOGOUT_VIEW'] = 'security.login'
     app.config['SECURITY_MSG_USER_EXISTS'] = ('Esse email já está cadastrado.', 'error')
     
     app.config['SECURITY_MSG_PASSWORD_INVALID'] = ('Senha inválida.', 'error')
@@ -27,7 +27,7 @@ def create_app():
     app.config['SECURITY_MSG_RETYPE_PASSWORD_MISMATCH'] = ('As senhas digitadas não são iguais.', 'error')
     app.config['SECURITY_MSG_EMAIL_NOT_PROVIDED'] = ('Você precisa informar um email.', 'error')
     app.config['SECURITY_MSG_PASSWORD_NOT_PROVIDED'] = ('Você precisa informar uma senha.', 'error')
-    
+
     
     db.init_app(app)
     migrate = Migrate(app, db)
@@ -105,3 +105,7 @@ def create_app():
     
     return app
 
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True)

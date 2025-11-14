@@ -73,6 +73,12 @@ body {
     box-shadow: 0 0 6px rgba(255, 204, 0, 0.6);
 }
 
+/* Estado de erro no campo */
+.register-form .form-control.error {
+    border-color: red;
+    box-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
+}
+
 /* Botão */
 .btn-register {
     width: 100%;
@@ -110,15 +116,31 @@ body {
     color: #ffd633;
 }
 
-
+/* Mensagens flash */
 .flash-error {
-    color: red;
-    margin-bottom: 10px;
+    color: #a94442;
+    background: #f2dede;
+    border: 1px solid #ebccd1;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 10px 0;
 }
 
+.flash-success {
+    color: #3c763d;
+    background: #dff0d8;
+    border: 1px solid #d6e9c6;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+/* Erros de campo */
 .field-error {
     color: red;
     font-size: 0.9em;
+    display: block;
+    margin-top: 5px;
 }
 
 /* Animação */

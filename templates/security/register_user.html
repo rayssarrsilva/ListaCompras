@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 <body>
+    <p style="color: red; font-weight: bold;">TESTE DE TEMPLATE</p>
+
     <div class="register-container">
         <div class="register-card">
             <div class="register-header">
@@ -14,14 +16,14 @@
             </div>
 
             <!-- MENSAGENS FLASH -->
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
                 <ul class="flash-messages">
-                  {% for message in messages %}
-                    <li class="flash-error">{{ message }}</li>
-                  {% endfor %}
+                {% for category, message in messages %}
+                    <li class="flash-{{ category }}">{{ message }}</li>
+                {% endfor %}
                 </ul>
-              {% endif %}
+            {% endif %}
             {% endwith %}
 
             <form action="{{ url_for('security.register') }}" method="POST" class="register-form">
@@ -42,6 +44,15 @@
                         <span class="field-error">{{ error }}</span>
                     {% endfor %}
                 </div>
+
+                <div class="form-group">
+                    <label for="password_confirm">Confirme a senha</label>
+                    {{ register_user_form.retype_password(class="form-control", placeholder="Confirme sua senha") }}
+                    {% for error in register_user_form.retype_password.errors %}
+                        <span class="field-error">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
 
                 <button type="submit" class="btn-register">Registrar</button>
             </form>
