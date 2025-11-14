@@ -7,7 +7,8 @@ from flask_migrate import Migrate
 
 #cconfiguração do flask, sqlalchemy e rotas web
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='templates')
+    
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
     app.config['SECRET_KEY'] = config.SECRET_KEY
     app.config['SECURITY_PASSWORD_SALT'] = 'um_salt_seguro'
