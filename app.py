@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 #cconfiguração do flask, sqlalchemy e rotas web
 def create_app():
     app = Flask(__name__, template_folder='templates')
-    
+
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
     app.config['SECRET_KEY'] = config.SECRET_KEY
     app.config['SECURITY_PASSWORD_SALT'] = 'um_salt_seguro'
@@ -19,7 +19,7 @@ def create_app():
     app.config['SECURITY_FLASH_MESSAGES'] = True
     app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # se não quiser email de confirmação
     
-    app.config['SECURITY_POST_REGISTER_VIEW'] = 'security.login'
+    app.config['SECURITY_POST_REGISTER_VIEW'] = 'login'
     app.config['SECURITY_POST_LOGOUT_VIEW'] = 'security.login'
     app.config['SECURITY_MSG_USER_EXISTS'] = ('Esse email já está cadastrado.', 'error')
     
@@ -28,6 +28,8 @@ def create_app():
     app.config['SECURITY_MSG_RETYPE_PASSWORD_MISMATCH'] = ('As senhas digitadas não são iguais.', 'error')
     app.config['SECURITY_MSG_EMAIL_NOT_PROVIDED'] = ('Você precisa informar um email.', 'error')
     app.config['SECURITY_MSG_PASSWORD_NOT_PROVIDED'] = ('Você precisa informar uma senha.', 'error')
+    app.config['SECURITY_REGISTER_USER_TEMPLATE'] = 'security/register_user.html'
+    app.config['SECURITY_PASSWORD_HASH'] = 'argon2'
 
     
     db.init_app(app)
