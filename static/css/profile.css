@@ -103,6 +103,17 @@ body {
     transform: translateY(-2px);
 }
 
+
+.flash-error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.field-error {
+    color: red;
+    font-size: 0.9em;
+}
+
 /* Animação */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }

@@ -110,11 +110,6 @@ body {
     color: #ffd633;
 }
 
-/* Animação */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
 
 .flash-error {
     color: red;
@@ -124,4 +119,10 @@ body {
 .field-error {
     color: red;
     font-size: 0.9em;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
