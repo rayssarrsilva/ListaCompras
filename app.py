@@ -17,9 +17,16 @@ def create_app():
     app.config['SECURITY_RENDER_TEMPLATE_EXT'] = '.html'
     app.config['SECURITY_FLASH_MESSAGES'] = True
     app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # se não quiser email de confirmação
-    app.config['SECURITY_POST_REGISTER_VIEW'] = '/login'  # ou qualquer rota de sucesso
-    app.config['SECURITY_POST_LOGOUT_VIEW'] = '/login'
     
+    app.config['SECURITY_POST_REGISTER_VIEW'] = 'security.login'
+    app.config['SECURITY_POST_LOGOUT_VIEW'] = '/login'
+    app.config['SECURITY_MSG_USER_EXISTS'] = ('Esse email já está cadastrado.', 'error')
+    
+    app.config['SECURITY_MSG_PASSWORD_INVALID'] = ('Senha inválida.', 'error')
+    app.config['SECURITY_MSG_PASSWORD_MISMATCH'] = ('As senhas não conferem.', 'error')
+    app.config['SECURITY_MSG_RETYPE_PASSWORD_MISMATCH'] = ('As senhas digitadas não são iguais.', 'error')
+    app.config['SECURITY_MSG_EMAIL_NOT_PROVIDED'] = ('Você precisa informar um email.', 'error')
+    app.config['SECURITY_MSG_PASSWORD_NOT_PROVIDED'] = ('Você precisa informar uma senha.', 'error')
     
     
     db.init_app(app)

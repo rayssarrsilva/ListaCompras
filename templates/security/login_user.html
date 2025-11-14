@@ -13,6 +13,19 @@
                 <p>Bem-vindo! Faça login para acessar seus carrinhos.</p>
             </div>
 
+            <!-- MENSAGENS FLASH -->
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="flash-messages">
+                  {% for message in messages %}
+                    <li class="flash-error">{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+
+
             <form action="{{ url_for('security.login') }}" method="POST" class="login-form">
                 {{ login_user_form.hidden_tag() }}
 
