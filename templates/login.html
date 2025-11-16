@@ -15,16 +15,6 @@
       <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for msg in messages %}
-            <p class="flash">{{ msg }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
-
     <div class="register-link">
       <p>✨ Ainda não tem conta?</p>
       <a href="{{ url_for('auth.register') }}" class="btn btn-secondary">Crie sua conta agora</a>
