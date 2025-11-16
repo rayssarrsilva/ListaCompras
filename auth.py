@@ -22,14 +22,14 @@ def register():
         username = request.form['username']
         password = request.form['password']
         if User.query.filter_by(username=username).first():
-            flash('Nome de usuário já existe.')
+            flash('Nome de usuário já existe.', 'error')
         else:
             new_user = User(username=username)
             new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
-            flash('Usuário criado com sucesso!')
-            return redirect(url_for('auth.login'))
+            flash('Usuário criado com sucesso!', 'success')
+            return redirect(url_for('auth.login'))  # Redireciona para login
     return render_template('register.html')
 
 @auth.route('/logout')

@@ -1,17 +1,5 @@
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Arial, sans-serif;
-}
+/* login.css */
 
-body {
-  background-color: #ffffff;
-  color: #333;
-}
-
-/* Seção de login aberta */
 .login-section {
   padding: 80px 20px;
   text-align: center;
@@ -24,7 +12,6 @@ body {
   font-weight: bold;
 }
 
-/* Formulário aberto */
 .login-form {
   max-width: 500px;
   margin: 0 auto;
@@ -42,7 +29,7 @@ body {
 .login-form input {
   padding: 12px;
   border: none;
-  border-bottom: 2px solid #ffcc00;
+  border-bottom: 2px solid #007bff;
   font-size: 1rem;
   background: transparent;
   transition: border-color 0.3s;
@@ -50,10 +37,9 @@ body {
 
 .login-form input:focus {
   outline: none;
-  border-bottom-color: #e6b800;
+  border-bottom-color: #0056b3;
 }
 
-/* Botões */
 .btn {
   padding: 12px 20px;
   border-radius: 25px;
@@ -63,13 +49,13 @@ body {
 }
 
 .btn-primary {
-  background: #ffcc00;
-  color: #333;
+  background: #007bff;
+  color: white;
   border: none;
 }
 
 .btn-primary:hover {
-  background: #ffd633;
+  background: #0056b3;
 }
 
 .btn-secondary {
@@ -84,8 +70,7 @@ body {
   background: #1e7e34;
 }
 
-/* Link para registro */
 .register-link {
-  margin-top: 30px;
+  margin-top: 40px;
   font-size: 1rem;
 }
