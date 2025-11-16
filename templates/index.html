@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Compras</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
-    <!-- Barra de navegação -->
-    <nav class="navbar">
-        <h1 class="logo">🛒 Lista de Compras</h1>
-        <ul class="nav-links">
-            <li><a href="#" onclick="handleNavAction('delete')">Deletar Carrinho</a></li>
-        </ul>
-    </nav>
+{% block content %}
+    <!-- Mensagens flash -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <!-- Criar novo carrinho -->
     <section class="form-section">
@@ -50,22 +47,14 @@
         {% endfor %}
     </div>
 
-        <!-- Modal do Pergaminho -->
+    <!-- Modal do Pergaminho -->
     <div id="pergaminho-overlay"></div>
     <div id="pergaminho-modal">
-    <button id="fechar-pergaminho">✖</button>
-    <h3>Itens do Carrinho</h3>
-    <ul id="lista-itens-modal"></ul>
+        <button id="fechar-pergaminho">✖</button>
+        <h3>Itens do Carrinho</h3>
+        <ul id="lista-itens-modal"></ul>
     </div>
 
-    <!-- Som do pergaminho -->
     <audio id="som-pergaminho" src="{{ url_for('static', filename='scroll-open.mp3') }}"></audio>
-
-    <!-- Container para quadrinhos flutuantes -->
     <div id="manage-container"></div>
-
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
-
+{% endblock %}

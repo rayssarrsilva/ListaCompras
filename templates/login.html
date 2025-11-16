@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+  <section class="login-section">
+    <h2 class="login-title">🔐 Faça seu Login</h2>
+
+    <form method="POST" action="{{ url_for('auth.login') }}" class="login-form">
+      <label for="username">Usuário</label>
+      <input type="text" name="username" id="username" placeholder="Digite seu usuário" required>
+
+      <label for="password">Senha</label>
+      <input type="password" name="password" id="password" placeholder="Digite sua senha" required>
+
+      <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for msg in messages %}
+            <p class="flash">{{ msg }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="register-link">
+      <p>✨ Ainda não tem conta?</p>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-secondary">Crie sua conta agora</a>
+    </div>
+  </section>
+{% endblock %}
