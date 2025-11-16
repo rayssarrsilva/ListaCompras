@@ -379,16 +379,15 @@ body {
   to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
-.delete-item-btn {
-  margin-left: 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #8b0000;
-  transition: transform 0.2s ease;
+.btn.danger {
+    background-color: #ff4d4d; /* vermelho mais intenso */
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.delete-item-btn:hover {
-  transform: scale(1.2);
+.btn.danger:hover {
+    background-color: #cc0000; /* vermelho escuro no hover */
+    transform: scale(1.05);
 }
+

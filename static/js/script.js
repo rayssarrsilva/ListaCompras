@@ -181,3 +181,4 @@ window.toggleItemList = toggleItemList;
 window.finalizeSelection = finalizeSelection;
 window.handleNavAction = handleNavAction;
 window.abrirPergaminho = abrirPergaminho;
+
