@@ -13,7 +13,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('index'))
-        flash('Usuário ou senha inválidos.', 'error')  # ← Adicione 'error'
+        flash('Usuário ou senha inválidos.', 'error')  
     return render_template('login.html')
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -28,7 +28,7 @@ def register():
             new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
-            flash('Conta criada com sucesso! Faça login.', 'success')  # ✅ Mensagem de sucesso
+            flash('Conta criada com sucesso! Faça login.', 'success') 
             return redirect(url_for('auth.login'))
     return render_template('register.html')
 
