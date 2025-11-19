@@ -1,3 +1,4 @@
+cd ListaCompras
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 venv\Scripts\Activate.ps1
 
@@ -21,3 +22,7 @@ with app.app_context():
 
 git config --global user.name "nome"
 git config --global user.email "@gmail.com"
+
+
+rodar o fastapi
+python -m uvicorn appfastapi:app --reload --port 8000
