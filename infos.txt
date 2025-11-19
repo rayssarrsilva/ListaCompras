@@ -17,3 +17,7 @@ no terminal pra atualizar o bd e recriar -->
 from app.py import app, db
 with app.app_context():
     db.create_all()
+
+
+git config --global user.name "nome"
+git config --global user.email "@gmail.com"
