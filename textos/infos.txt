@@ -26,3 +26,8 @@ git config --global user.email "@gmail.com"
 
 rodar o fastapi
 python -m uvicorn appfastapi:app --reload --port 8000
+
+
+config.py
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:123@localhost:5432/shopping_cart_db')
+
