@@ -1,0 +1,19 @@
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+venv\Scripts\Activate.ps1
+
+ou
+
+venv\Scripts\activate
+
+
+gera SECRET_KEY: from secrets import token_hex
+print(token_hex(32))
+com o comando python, no terminal
+
+pra add o .env no app: pip install python-dotenv
+
+no terminal pra atualizar o bd e recriar -->
+
+from app.py import app, db
+with app.app_context():
+    db.create_all()

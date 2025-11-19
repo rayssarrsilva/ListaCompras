@@ -1,21 +1,26 @@
+import os
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from models import db, Item, Cart, User
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from dotenv import load_dotenv
+
+# Carrega variáveis do .env
+load_dotenv()
 
 def create_app():
     app = Flask(__name__, template_folder='templates')
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123@localhost:5432/shopping_cart_db"
-    app.config['SECRET_KEY'] = "um_segredo_seguro"
+    # Usa as variáveis do .env
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
     db.init_app(app)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
-
     login_manager.login_message = None
-    
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -24,7 +29,7 @@ def create_app():
     app.register_blueprint(auth_blueprint)
 
     with app.app_context():
-        db.create_all() # recria conforme models.py
+        db.create_all()  # Cria as tabelas conforme models.py
 
     @app.route("/")
     @login_required
