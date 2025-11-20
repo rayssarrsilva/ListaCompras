@@ -19,7 +19,7 @@ Permite criar, visualizar, editar e deletar carrinhos, além de adicionar itens 
 
 ## 🛠️ Tecnologias
 
-- **Backend:** Flask + SQLAlchemy + Flask-Login  
+- **Backend:** Flask + SQLAlchemy + Flask-Login + FastAPI
 - **Banco de Dados:** PostgreSQL  
 - **Frontend:** HTML, CSS, JavaScript  
 - **Gerenciamento de dependências:** `requirements.txt`  
