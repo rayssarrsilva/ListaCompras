@@ -24,10 +24,12 @@ git config --global user.name "nome"
 git config --global user.email "@gmail.com"
 
 
-rodar o fastapi
+rodar o fastapi servidor ASGI (como uvicorn)
 python -m uvicorn appfastapi:app --reload --port 8000
 
 
 config.py
 DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:123@localhost:5432/shopping_cart_db')
 
+rodar o flask (servidor web tradicional)
+python app.py 
