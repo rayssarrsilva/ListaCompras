@@ -25,12 +25,14 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
+        user_id = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Token inválido")
-    except JWTError:
+        # 👇 CONVERTA PARA INTEIRO
+        user_id = int(user_id)
+    except (JWTError, ValueError):
         raise HTTPException(status_code=401, detail="Token inválido")
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")  # melhor usar 401 aqui
     return user
