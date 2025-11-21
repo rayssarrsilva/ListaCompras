@@ -28,11 +28,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         user_id = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Token inválido")
-        # 👇 CONVERTA PARA INTEIRO
+        # user_id já é string, mas converta para int para buscar no banco
         user_id = int(user_id)
-    except (JWTError, ValueError):
+    except (JWTError, ValueError, TypeError) as e:
+        print("Erro de autenticação:", str(e))
         raise HTTPException(status_code=401, detail="Token inválido")
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
-        raise HTTPException(status_code=401, detail="Credenciais inválidas")  # melhor usar 401 aqui
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")
     return user
+    
+print("SECRET_KEY usada:", repr(SECRET_KEY))

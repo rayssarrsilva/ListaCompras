@@ -50,6 +50,7 @@ def add_item(cart_id: int, item: ItemCreate, db: Session = Depends(get_db), curr
     new_item = Item(name=item.name, cart_id=cart.id)
     db.add(new_item)
     db.commit()
+    db.refresh(new_item)  # ← ISSO FAZ O ID SER CARREGADO
     return {"id": new_item.id, "name": new_item.name}
 
 # 5. Listar itens do carrinho

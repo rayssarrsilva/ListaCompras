@@ -30,5 +30,6 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter_by(username=user_data.username).first()
     if not user or not user.check_password(user_data.password):
         raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
-    token = create_access_token({"sub": user.id})
+
+    token = create_access_token({"sub": str(user.id)})
     return {"access_token": token, "token_type": "bearer"}
