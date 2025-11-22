@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from ListaCompras.backend.models import User
-from ListaCompras.backend.database import get_db
+from .models import User
+from .database import get_db
 import os
 
+load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
@@ -17,8 +19,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({
         "exp": expire,
-        "iat": datetime.utcnow(),  # ← garante que o token muda a cada geração
-        "nbf": datetime.utcnow()   # ← opcional, mas ajuda na validade
+        "iat": datetime.utcnow(),
+        "nbf": datetime.utcnow()
     })
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -28,14 +30,10 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         user_id = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Token inválido")
-        # user_id já é string, mas converta para int para buscar no banco
         user_id = int(user_id)
-    except (JWTError, ValueError, TypeError) as e:
-        print("Erro de autenticação:", str(e))
+    except (JWTError, ValueError, TypeError):
         raise HTTPException(status_code=401, detail="Token inválido")
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
     return user
-    
-print("SECRET_KEY usada:", repr(SECRET_KEY))

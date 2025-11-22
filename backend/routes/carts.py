@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ListaCompras.backend.models import Cart, Item, User
-from ListaCompras.backend.database import get_db
-from ListaCompras.backend.security import get_current_user
 from pydantic import BaseModel
+from ..models import Cart, Item, User
+from ..database import get_db
+from ..security import get_current_user
 
 router = APIRouter(prefix="/api", tags=["Carrinhos"])
 
-# Schemas Pydantic
 class CartCreate(BaseModel):
     name: str
 
@@ -17,21 +16,19 @@ class ItemCreate(BaseModel):
 class BulkItems(BaseModel):
     items: list[str]
 
-# 1. Criar carrinho
 @router.post("/carrinhos")
 def create_cart(cart: CartCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     new_cart = Cart(name=cart.name, user_id=current_user.id)
     db.add(new_cart)
     db.commit()
+    db.refresh(new_cart)
     return {"id": new_cart.id, "name": new_cart.name}
 
-# 2. Listar carrinhos do usuário
 @router.get("/carrinhos")
 def list_carts(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     carts = db.query(Cart).filter_by(user_id=current_user.id).all()
     return [{"id": c.id, "name": c.name, "status": c.status} for c in carts]
 
-# 3. Deletar carrinho
 @router.delete("/carrinhos/{cart_id}")
 def delete_cart(cart_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     cart = db.query(Cart).filter_by(id=cart_id, user_id=current_user.id).first()
@@ -41,7 +38,6 @@ def delete_cart(cart_id: int, db: Session = Depends(get_db), current_user: User 
     db.commit()
     return {"success": True}
 
-# 4. Adicionar item ao carrinho
 @router.post("/carrinhos/{cart_id}/itens")
 def add_item(cart_id: int, item: ItemCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     cart = db.query(Cart).filter_by(id=cart_id, user_id=current_user.id).first()
@@ -50,10 +46,9 @@ def add_item(cart_id: int, item: ItemCreate, db: Session = Depends(get_db), curr
     new_item = Item(name=item.name, cart_id=cart.id)
     db.add(new_item)
     db.commit()
-    db.refresh(new_item)  # ← ISSO FAZ O ID SER CARREGADO
+    db.refresh(new_item)
     return {"id": new_item.id, "name": new_item.name}
 
-# 5. Listar itens do carrinho
 @router.get("/carrinhos/{cart_id}/itens")
 def get_cart_items(cart_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     cart = db.query(Cart).filter_by(id=cart_id, user_id=current_user.id).first()
@@ -62,7 +57,6 @@ def get_cart_items(cart_id: int, db: Session = Depends(get_db), current_user: Us
     items = db.query(Item).filter_by(cart_id=cart.id).all()
     return [{"id": item.id, "name": item.name} for item in items]
 
-# 6. Deletar item
 @router.delete("/itens/{item_id}")
 def delete_item(item_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     item = db.query(Item).join(Cart).filter(Item.id == item_id, Cart.user_id == current_user.id).first()
@@ -72,7 +66,6 @@ def delete_item(item_id: int, db: Session = Depends(get_db), current_user: User 
     db.commit()
     return {"success": True}
 
-# 7. Adicionar vários itens (bulk)
 @router.post("/carrinhos/{cart_id}/bulk")
 def add_bulk(cart_id: int, bulk: BulkItems, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     cart = db.query(Cart).filter_by(id=cart_id, user_id=current_user.id).first()

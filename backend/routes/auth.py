@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ListaCompras.backend.models import User, db
-from ListaCompras.backend.database import get_db
-from ListaCompras.backend.security import create_access_token
 from pydantic import BaseModel
+from ..models import User
+from ..database import get_db
+from ..security import create_access_token
 
 router = APIRouter(prefix="/api", tags=["Auth"])
 
@@ -30,6 +30,5 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter_by(username=user_data.username).first()
     if not user or not user.check_password(user_data.password):
         raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
-
     token = create_access_token({"sub": str(user.id)})
     return {"access_token": token, "token_type": "bearer"}
