@@ -5,7 +5,7 @@
     <!-- Criar novo carrinho -->
     <section class="form-section">
         <h2>Criar Novo Carrinho</h2>
-        <form action="create_cart" method="post" class="add-form">
+        <form action="{{ url_for('create_cart') }}" method="post" class="add-form">
             <input type="text" name="cart_name" placeholder="Nome do carrinho" required>
             <button type="submit">Criar Carrinho</button>
         </form>
@@ -22,31 +22,20 @@
             </h3>
 
             <div class="card-actions">
-                <button class="btn" onclick="toggleSelect({{ cart.id }}, '{{ cart.name }}')">Selecionar</button>
+                <button class="btn" onclick="toggleSelect({{ cart.id }}, '{{ cart.name|e }}')">Selecionar</button>
                 <button class="btn edit" onclick="abrirPergaminho({{ cart.id }})">Ver Itens</button>
-                <!-- Botão de deletar carrinho -->
-                {% if selected_cart and selected_cart.id == cart.id %}
                 <form action="{{ url_for('delete_cart', cart_id=cart.id) }}" method="post" style="display:inline;">
                     <button type="submit" class="btn delete" onclick="return confirm('Tem certeza que deseja deletar este carrinho?')">
                         Deletar
                     </button>
                 </form>
-                {% endif %}
-            </div>
-
-            <div class="cart-items" id="items-{{ cart.id }}" style="display: none;">
-                <ul>
-                    {% for item in cart.items %}
-                    <li>{{ item.name }}</li>
-                    {% endfor %}
-                </ul>
             </div>
         </div>
         {% endfor %}
     </div>
 
     <!-- Modal do Pergaminho -->
-    <div id="pergaminho-overlay"></div>
+    <div id="pergaminho-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:999;"></div>
     <div id="pergaminho-modal">
         <button id="fechar-pergaminho">✖</button>
         <h3>Itens do Carrinho</h3>
@@ -55,4 +44,25 @@
 
     <audio id="som-pergaminho" src="{{ url_for('static', filename='scroll-open.mp3') }}"></audio>
     <div id="manage-container"></div>
+
+    <!-- Flash messages elegantes -->
+    <div id="flash-container" class="flash-container"></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const flashContainer = document.getElementById('flash-container');
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          if (flashContainer && "{{ message|e }}".trim()) {
+            flashContainer.className = 'flash-container flash-' + ('{{ category }}' === 'error' ? 'error' : 'success');
+            flashContainer.innerHTML = `<span class="flash-icon"></span> {{ message|e }}`;
+            setTimeout(() => flashContainer.classList.add('show'), 100);
+            setTimeout(() => {
+              flashContainer.classList.remove('show');
+              setTimeout(() => flashContainer.innerHTML = '', 300);
+            }, 4000);
+          }
+        {% endfor %}
+      {% endwith %}
+    });
+    </script>
 {% endblock %}

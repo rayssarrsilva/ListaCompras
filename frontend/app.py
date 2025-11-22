@@ -3,7 +3,6 @@ from flask import Flask, render_template, redirect, url_for, request, session, j
 from flask_login import LoginManager, login_required, UserMixin
 from dotenv import load_dotenv
 import requests
-from auth import auth as auth_blueprint
 
 load_dotenv()
 
@@ -15,8 +14,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 FASTAPI_BASE_URL = "http://localhost:8000"
-
-app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
 class User(UserMixin):
     def __init__(self, user_id):

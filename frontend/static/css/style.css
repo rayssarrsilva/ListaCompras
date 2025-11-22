@@ -16,12 +16,6 @@
     text-align: center;
 }
 
-.flash {
-    color: red;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
 /* Fundo branco com detalhes em amarelo */
 body {
     background-color: #ffffff;
@@ -230,37 +224,12 @@ body {
     background-color: #ffd633;
 }
 
-/* Mensagens flash */
-.flash-messages {
-    margin: 20px auto;
-    max-width: 600px;
-    padding: 15px;
-    background-color: #fffbea;
-    border: 1px solid #ffcc00;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.flash-message {
-    color: #333;
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-/* Se quiser destacar erros em vermelho */
-.flash-message.error {
-    color: #d9534f;
-}
-
-.flash-message.success {
-    color: #5cb85c;
-}
-
 /* Animação suave para quadrinhos */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
 /* Popup de aviso */
 .popup-warning {
     position: fixed;
@@ -321,62 +290,65 @@ body {
     background-color: #ff9999;
     color: #fff;
 }
+
+/* Modal do Pergaminho */
 #pergaminho-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: url('/static/pergaminho.png') no-repeat center center;
-  background-size: 100% 100%;
-  padding: 40px 30px;
-  border: none;
-  border-radius: 12px;
-  max-width: 500px;
-  width: 90vw;
-  max-height: 80vh;
-  overflow-y: auto;
-  z-index: 1000;
-  box-shadow: 0 0 30px rgba(0,0,0,0.6);
-  font-family: 'MedievalSharp', cursive;
-  color: #3e2f1c;
-  display: none;
-  animation: fadeIn 0.4s ease-in-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url('/static/pergaminho.png') no-repeat center center;
+    background-size: 100% 100%;
+    padding: 40px 30px;
+    border: none;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    font-family: 'MedievalSharp', cursive;
+    color: #3e2f1c;
+    display: none;
+    animation: fadeIn 0.4s ease-in-out;
 }
 
 #pergaminho-modal h3 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 #pergaminho-modal ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 #pergaminho-modal li {
-  font-size: 18px;
-  margin-bottom: 8px;
-  text-align: center;
+    font-size: 18px;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
 #fechar-pergaminho {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(238, 238, 238, 0.6);
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #3e2f1c;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(238, 238, 238, 0.6);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #3e2f1c;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
 }
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -60%); }
-  to { opacity: 1; transform: translate(-50%, -50%); }
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
 .btn.danger {
@@ -390,4 +362,3 @@ body {
     background-color: #cc0000; /* vermelho escuro no hover */
     transform: scale(1.05);
 }
-

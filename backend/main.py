@@ -1,7 +1,8 @@
+# backend/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine
-from .models import Base
+from .models import Base          # ← Importa Base do models.py (na mesma pasta)
+from .database import engine      # ← Importa engine do database.py (na mesma pasta)
 from .routes.auth import router as auth_router
 from .routes.carts import router as cart_router
 

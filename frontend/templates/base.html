@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>{% block title %}Lista de Compras{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
     <nav class="navbar">
         <h1 class="logo">🛒 Lista de Compras</h1>
         <ul class="nav-links">
-            <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+            <li><a href="{{ url_for('logout') }}">Sair</a></li>
         </ul>
     </nav>
 

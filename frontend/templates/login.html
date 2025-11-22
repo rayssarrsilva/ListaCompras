@@ -5,7 +5,7 @@
   <section class="login-section">
     <h2 class="login-title">🔐 Faça seu Login</h2>
 
-    <form method="POST" action="{{ url_for('auth.login') }}" class="login-form">
+    <form method="POST" action="{{ url_for('login') }}" class="login-form">
       <label for="username">Usuário</label>
       <input type="text" name="username" id="username" placeholder="Digite seu usuário" required>
 
@@ -17,7 +17,28 @@
 
     <div class="register-link">
       <p>✨ Ainda não tem conta?</p>
-      <a href="{{ url_for('auth.register') }}" class="btn btn-secondary">Crie sua conta agora</a>
+      <a href="{{ url_for('register') }}" class="btn btn-secondary">Crie sua conta agora</a>
     </div>
   </section>
+
+  <div id="flash-container" class="flash-container"></div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const flashContainer = document.getElementById('flash-container');
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        if (flashContainer && "{{ message|e }}".trim()) {
+          flashContainer.className = 'flash-container flash-' + ('{{ category }}' === 'error' ? 'error' : 'success');
+          flashContainer.innerHTML = `<span class="flash-icon"></span> {{ message|e }}`;
+          setTimeout(() => flashContainer.classList.add('show'), 100);
+          setTimeout(() => {
+            flashContainer.classList.remove('show');
+            setTimeout(() => flashContainer.innerHTML = '', 300);
+          }, 4000);
+        }
+      {% endfor %}
+    {% endwith %}
+  });
+  </script>
 {% endblock %}
