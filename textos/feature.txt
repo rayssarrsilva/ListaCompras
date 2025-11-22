@@ -1,0 +1,23 @@
+ListaCompras/
+├── backend/               ← API FastAPI (só JSON)
+│   ├── main.py
+│   ├── database.py
+│   ├── models.py          ← SQLAlchemy puro (não Flask!)
+│   ├── security.py
+│   ├── routes/
+│   │   ├── auth.py
+│   │   └── carts.py
+│   └── .env
+│
+├── frontend/              ← Interface Flask (HTML/Jinja2)
+│   ├── app.py
+│   ├── templates/
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   └── register.html
+│   ├── static/
+│   └── .env
+│
+├── .gitignore
+├── requirements.txt
+└── README.md

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import Cart, Item, User
-from database import get_db
-from security import get_current_user
+from ListaCompras.backend.models import Cart, Item, User
+from ListaCompras.backend.database import get_db
+from ListaCompras.backend.security import get_current_user
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api", tags=["Carrinhos"])

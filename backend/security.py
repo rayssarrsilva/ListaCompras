@@ -3,8 +3,8 @@ from jose import JWTError, jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from models import User
-from database import get_db
+from ListaCompras.backend.models import User
+from ListaCompras.backend.database import get_db
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")

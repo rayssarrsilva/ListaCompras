@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
-from models import db, Item, Cart, User
+from ListaCompras.backend.models import db, Item, Cart, User
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from dotenv import load_dotenv
 
@@ -25,7 +25,7 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    from auth import auth as auth_blueprint
+    from ListaCompras.frontend.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     with app.app_context():
