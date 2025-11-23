@@ -5,6 +5,14 @@
     <title>{% block title %}Lista de Compras{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <!-- Injeta token para JavaScript -->
+    {% if session.get('access_token') %}
+    <meta name="token" content="{{ session['access_token'] }}">
+    <script>
+        // Também salva no sessionStorage para acesso fácil
+        sessionStorage.setItem('access_token', "{{ session['access_token'] }}");
+    </script>
+    {% endif %}
 </head>
 <body>
     <nav class="navbar">

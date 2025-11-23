@@ -23,7 +23,7 @@
 
             <div class="card-actions">
                 <button class="btn" onclick="toggleSelect({{ cart.id }}, '{{ cart.name|e }}')">Selecionar</button>
-                <button class="btn edit" onclick="abrirPergaminho({{ cart.id }})">Ver Itens</button>
+                    <button class="btn edit" onclick="abrirPergaminho({{ cart.id }})">Ver Itens</button>
                 <form action="{{ url_for('delete_cart', cart_id=cart.id) }}" method="post" style="display:inline;">
                     <button type="submit" class="btn delete" onclick="return confirm('Tem certeza que deseja deletar este carrinho?')">
                         Deletar

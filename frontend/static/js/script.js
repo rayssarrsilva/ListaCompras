@@ -1,5 +1,15 @@
+// Configuração da API
+const API_BASE_URL = 'http://localhost:8000';
+
 // Conjunto de carrinhos selecionados
 let selectedCarts = new Set();
+
+// Helper para obter token de autenticação
+function getAuthToken() {
+    return sessionStorage.getItem('access_token') || 
+           localStorage.getItem('access_token') ||
+           document.querySelector('meta[name="token"]')?.getAttribute('content');
+}
 
 // Selecionar / desselecionar carrinho
 function toggleSelect(cartId, cartName) {
@@ -39,7 +49,7 @@ function toggleSelect(cartId, cartName) {
     }
 }
 
-// Mostrar/esconder itens simples (não o pergaminho)
+// Mostrar/esconder itens simples (não usado, mas mantido)
 function toggleItemList(cartId) {
     const itemsDiv = document.getElementById(`items-${cartId}`);
     itemsDiv.style.display = itemsDiv.style.display === 'none' ? 'block' : 'none';
@@ -54,16 +64,24 @@ function finalizeSelection(cartId) {
     if (box) box.remove();
 }
 
-// Popup de aviso
+// Popup de aviso elegante
 function showPopup(message) {
+    document.querySelectorAll('.popup-warning').forEach(el => el.remove());
+    
     const popup = document.createElement("div");
     popup.className = "popup-warning";
     popup.innerText = message;
     document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 3000);
+    
+    setTimeout(() => popup.style.opacity = "1", 10);
+    
+    setTimeout(() => {
+        popup.style.opacity = "0";
+        setTimeout(() => popup.remove(), 300);
+    }, 3000);
 }
 
-// Ações da navbar
+// Ações da navbar (não usada atualmente, mas mantida)
 function handleNavAction(action) {
     if (selectedCarts.size === 0) {
         showPopup("⚠️ Selecione um carrinho antes de realizar esta ação!");
@@ -97,21 +115,32 @@ function handleNavAction(action) {
     }
 }
 
-// Confirmar exclusão
+// Confirmar exclusão de carrinho
 function confirmDelete(cartId) {
     const skip = document.getElementById("skipConfirm")?.checked;
     if (skip) localStorage.setItem("skipDeleteConfirm", "true");
 
-    fetch(`/delete/${cartId}`, { method: "POST" })
-        .then(response => {
-            if (response.ok) {
-                showPopup(`🗑️ Carrinho ${cartId} deletado com sucesso!`);
-                finalizeSelection(cartId);
+    fetch(`${API_BASE_URL}/api/carrinhos/${cartId}`, { 
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${getAuthToken()}`
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            showPopup(`🗑️ Carrinho deletado com sucesso!`);
+            finalizeSelection(cartId);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            if (response.status === 401) {
+                showPopup('🔒 Sessão expirada. Faça login novamente.');
+                setTimeout(() => window.location.href = '/login', 2000);
             } else {
                 showPopup("❌ Erro ao deletar carrinho.");
             }
-        })
-        .catch(() => showPopup("❌ Erro de conexão com o servidor."));
+        }
+    })
+    .catch(() => showPopup("❌ Erro de conexão com o servidor."));
 
     cancelDelete(document.querySelector(".popup-confirm .actions button:last-child"));
 }
@@ -121,64 +150,121 @@ function cancelDelete(el) {
     el.closest(".popup-confirm").remove();
 }
 
-// Abrir pergaminho com itens
+// Abrir pergaminho com itens (SEM DUPLICAÇÃO)
+// Abrir pergaminho com itens (CORRIGIDA)
 function abrirPergaminho(cartId) {
     const modal = document.getElementById('pergaminho-modal');
     const overlay = document.getElementById('pergaminho-overlay');
     const lista = document.getElementById('lista-itens-modal');
     const som = document.getElementById('som-pergaminho');
 
-    lista.innerHTML = '';
+    // Limpa a lista e mostra loading
+    lista.innerHTML = '<li style="text-align:center; color:#3e2f1c; font-style:italic;">Carregando...</li>';
 
-    fetch(`/api/carrinhos/${cartId}/itens`)
-        .then(res => res.json())
-        .then(data => {
+    fetch(`${API_BASE_URL}/api/carrinhos/${cartId}/itens`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${getAuthToken()}`
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error(`Falha na resposta: ${res.status}`);
+        return res.json();
+    })
+    .then(data => {
+        lista.innerHTML = '';
+        
+        if (data.length === 0) {
+            lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
+        } else {
             data.forEach(item => {
                 const li = document.createElement('li');
-                li.textContent = item.name;
-
-                const btn = document.createElement('button');
-                btn.textContent = '🗑️';
-                btn.className = 'delete-item-btn';
-                btn.onclick = () => deletarItem(item.id, li);
-
-                li.appendChild(btn);
+                li.innerHTML = `
+                    ${item.name}
+                    <button class="btn delete-item-btn" 
+                            onclick="deletarItem(${item.id}, this.parentElement)">
+                        🗑️
+                    </button>
+                `;
                 lista.appendChild(li);
             });
+        }
 
-            overlay.style.display = 'block';
-            modal.style.display = 'block';
-            som.play();
-        });
+        overlay.style.display = 'block';
+        modal.style.display = 'block';
+        som.play();
+    })
+    .catch(err => {
+        console.error('Erro ao carregar itens:', err);
+        lista.innerHTML = '<li style="text-align:center; color:#c62828;">Erro ao carregar</li>';
+    });
 }
 
-// Deletar item específico
+// Deletar item específico (COM AUTENTICAÇÃO E URL CORRETA)
 function deletarItem(itemId, liElement) {
-    fetch(`/api/itens/${itemId}`, { method: 'DELETE' })
-        .then(res => {
-            if (res.ok) {
-                liElement.remove();
-            } else {
-                alert("Erro ao deletar item.");
+    if (!confirm('Tem certeza que deseja deletar este item?')) return;
+
+    const token = getAuthToken();
+    if (!token) {
+        showPopup('🔒 Sessão expirada. Faça login novamente.');
+        setTimeout(() => window.location.href = '/login', 2000);
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/api/itens/${itemId}`, { 
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            liElement.remove();
+            showPopup('✅ Item deletado!');
+            
+            const lista = document.getElementById('lista-itens-modal');
+            if (lista && lista.children.length === 0) {
+                lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
             }
-        });
+        } else {
+            if (res.status === 401) {
+                showPopup('🔒 Token inválido. Faça login novamente.');
+                setTimeout(() => window.location.href = '/login', 2000);
+            } else if (res.status === 404) {
+                showPopup('❌ Item não encontrado.');
+            } else {
+                showPopup(`❌ Erro: ${res.status}`);
+            }
+        }
+    })
+    .catch(err => {
+        console.error('Erro de rede:', err);
+        showPopup('🌐 Erro de conexão com o servidor');
+    });
 }
 
 // Fechar pergaminho
 document.addEventListener("DOMContentLoaded", function () {
     const fecharBtn = document.getElementById('fechar-pergaminho');
+    const overlay = document.getElementById('pergaminho-overlay');
+    
     if (fecharBtn) {
-        fecharBtn.addEventListener('click', () => {
-            document.getElementById('pergaminho-modal').style.display = 'none';
-            document.getElementById('pergaminho-overlay').style.display = 'none';
-        });
+        fecharBtn.addEventListener('click', fecharPergaminho);
+    }
+    
+    if (overlay) {
+        overlay.addEventListener('click', fecharPergaminho);
+    }
+    
+    function fecharPergaminho() {
+        document.getElementById('pergaminho-modal').style.display = 'none';
+        document.getElementById('pergaminho-overlay').style.display = 'none';
     }
 });
 
-// expõe funções globais
+// Expõe funções globais
 window.toggleSelect = toggleSelect;
 window.toggleItemList = toggleItemList;
 window.finalizeSelection = finalizeSelection;
 window.handleNavAction = handleNavAction;
 window.abrirPergaminho = abrirPergaminho;
-
