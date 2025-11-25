@@ -72,13 +72,6 @@ Aqui está o README.md pronto para seu GitHub:
 Um sistema elegante e funcional para gerenciar listas de compras com login, múltiplos carrinhos, adição em lote e interface com efeitos de pergaminho!
 
 
-
-
-
-
-
-
-
 🚀 Funcionalidades
 ✅ Registro e login de usuários
 ✅ Criação de múltiplos carrinhos por usuário
@@ -183,4 +176,5 @@ Feito com ❤️ para quem acredita que tecnologia deve ser acessível, elegante
 Basta seguir os passos acima — e em menos de 5 minutos, você terá seu próprio sistema de lista de compras rodando localmente.
 
 Boa sorte, e divirta-se! 🛒✨
+
 
