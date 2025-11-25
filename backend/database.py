@@ -3,8 +3,8 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from .models import Base  # ← IMPORTAÇÃO CORRETA
 
-# 🔑 Carrega o .env da mesma pasta deste arquivo (backend/)
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(env_path)
 

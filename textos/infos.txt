@@ -46,3 +46,6 @@ venv\Scripts\python.exe -m frontend.app
 Gerar secret key 
 import secrets
 print(secrets.token_urlsafe(32))
+
+remove a venv a força
+Remove-Item -Recurse -Force venv
