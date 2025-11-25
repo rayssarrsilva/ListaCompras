@@ -19,8 +19,8 @@
 📦 Pré-requisitos
 Antes de começar, certifique-se de ter instalado:
 
-Python 3.10+
-Git
+Python 3.10+ | 
+Git |
 PostgreSQL 12+
 ```💡 Dica para Windows: Use o PowerShell (não o CMD) para evitar problemas com permissões de script.```
 
@@ -105,6 +105,7 @@ Basta seguir os passos acima — e em menos de 5 minutos, você terá seu própr
 
 Boa sorte, e divirta-se! 🛒✨
 ---
+
 
 
 
