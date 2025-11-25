@@ -37,7 +37,7 @@ PostgreSQL 12+ |
 
 ---
 
-#🛠️ Passo a Passo para Rodar o Projeto
+# 🛠️ Passo a Passo para Rodar o Projeto
 ## 1. Clone o repositório
 git clone https://github.com/seu-usuario/ListaCompras.git
 cd ListaCompras
@@ -105,6 +105,7 @@ Basta seguir os passos acima — e em menos de 5 minutos, você terá seu própr
 
 Boa sorte, e divirta-se! 🛒✨
 ---
+
 
 
 
