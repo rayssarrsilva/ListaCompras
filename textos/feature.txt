@@ -17,7 +17,11 @@ ListaCompras/
 │   │   └── register.html
 │   ├── static/
 │   └── .env
-│
+├── textos/
+|    ├── feature.txt 
+|    ├── infos.txt
+|    └── pytest.txt
 ├── .gitignore
+├──env.exemple
 ├── requirements.txt
 └── README.md

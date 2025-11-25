@@ -1,2 +1,66 @@
 anotações.txt
 .env
+
+# Ambiente virtual Python
+venv/
+env/
+ENV/
+.venv
+.env
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Cache e bytecode do Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Logs e bancos de dados locais (opcional: mantenha se usar SQLite para testes)
+*.log
+*.sqlite3
+instance/
+
+# Variáveis de ambiente (JÁ INCLUÍDO, mas reforçando)
+.env
+.env.local
+.env.*.local
+
+# Arquivos de teste (opcional)
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+
+# Build artifacts
+dist/
+build/
+*.tar.gz
+*.whl
+
+# Sistema de migração (Alembic)
+# ⚠️ IMPORTANTE: Se você usar migrações do Alembic,
+# mantenha a pasta `alembic/versions/` no versionamento,
+# mas ignore arquivos .pyc dentro dela.
+alembic/__pycache__/
+alembic/versions/*.pyc
+
+# FastAPI reload cache (raro, mas possível)
+.reloader/
