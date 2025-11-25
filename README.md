@@ -93,18 +93,19 @@ Se você seguiu todos os passos e ainda assim não funcionou, sinta-se à vontad
 ➡️ Acesse meu Portfólio (hospedado no GitHub Pages)
 ➡️ Na aba "Contato", você pode me enviar uma mensagem diretamente.
 
-Estou aqui para ajudar! 💙
+#### Estou aqui para ajudar! 💙
 ---
 📜 Licença
 Este projeto é de código aberto e gratuito para uso pessoal e educacional.
 
-Feito com ❤️ para quem acredita que tecnologia deve ser acessível, elegante e funcional.
+#### Feito com ❤️ para quem acredita que tecnologia deve ser acessível, elegante e funcional.
 ---
 ✅ Pronto para usar!
 Basta seguir os passos acima — e em menos de 5 minutos, você terá seu próprio sistema de lista de compras rodando localmente.
 
-Boa sorte, e divirta-se! 🛒✨
+### Boa sorte, e divirta-se! 🛒✨
 ---
+
 
 
 
