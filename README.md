@@ -41,33 +41,29 @@ PostgreSQL 12+
 1. Clone o repositório
 git clone https://github.com/seu-usuario/ListaCompras.git
 cd ListaCompras
----
+
 2. Crie e ative o ambiente virtual
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 
 ⚠️ Se aparecer erro de execução de scripts, abra o PowerShell como administrador e execute uma vez:
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
----
 
 3. Instale as dependências
 pip install -r requirements.txt
 ✅ O arquivo requirements.txt já inclui todas as dependências necessárias, inclusive psycopg2-binary (driver do PostgreSQL) e python-multipart.
----
 
 4. Configure o banco de dados PostgreSQL
 Abra o pgAdmin ou use o terminal do PostgreSQL.
 Crie um banco de dados chamado: listacompras
 Certifique-se de que o usuário postgres tenha senha 123 (apenas para desenvolvimento!).
 🔒 Em produção, nunca use senha fraca nem o usuário postgres!
----
 
 5. Configure as variáveis de ambiente
 Crie um arquivo .env na raiz do projeto com o seguinte conteúdo:
 DATABASE_URL=postgresql://postgres:123@localhost:5432/listacompras
 SECRET_KEY=4b08d4a0795967a5345a82597f91f1f182ecac009681ca3058efecdcb0b6a459 
 📌 Importante: O .env não deve ser commitado em repositórios públicos. Ele já está listado no .gitignore.
----
 
 6. Inicie o Backend (FastAPI)
 Abra um novo terminal (mantenha o ambiente virtual ativado) e execute:
@@ -75,13 +71,11 @@ Abra um novo terminal (mantenha o ambiente virtual ativado) e execute:
 uvicorn backend.main:app --reload --port 8000 
 ✅ Você verá: ``` INFO:     Uvicorn running on http://127.0.0.1:8000 ```
 🔍 Teste no navegador: http://localhost:8000 → deve retornar {"message": "API ListaCompras está rodando 🚀"}
----
 
 7. Inicie o Frontend (Flask)
 Em outro terminal (com o ambiente virtual ativado):
 # Na raiz do projeto
 python -m frontend.app
----
 
 8. Acesse a aplicação
 Abra o navegador e vá para:
@@ -91,6 +85,7 @@ Crie uma conta
 Faça login
 Crie carrinhos, adicione itens e use o pergaminho mágico! 
 ---
+
 📬 Dúvidas ou Problemas?
 Se você seguiu todos os passos e ainda assim não funcionou, sinta-se à vontade para entrar em contato!
 
@@ -109,6 +104,7 @@ Basta seguir os passos acima — e em menos de 5 minutos, você terá seu própr
 
 Boa sorte, e divirta-se! 🛒✨
 ---
+
 
 
 
