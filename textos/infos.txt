@@ -36,6 +36,7 @@ python app.py
 
 cd backend
 uvicorn main:app --reload --port 8000
+
 uvicorn backend.main:app --reload --port 8000
 
 cd frontend

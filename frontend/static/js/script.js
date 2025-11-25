@@ -150,30 +150,50 @@ function cancelDelete(el) {
     el.closest(".popup-confirm").remove();
 }
 
-// Abrir pergaminho com itens (SEM DUPLICAÇÃO)
-// Abrir pergaminho com itens (CORRIGIDA)
+// Abrir pergaminho com itens (VERSÃO ROBUSTA COM LOGS)
 function abrirPergaminho(cartId) {
+    console.log('🔥 Função abrirPergaminho chamada com cartId:', cartId);
+
     const modal = document.getElementById('pergaminho-modal');
     const overlay = document.getElementById('pergaminho-overlay');
     const lista = document.getElementById('lista-itens-modal');
     const som = document.getElementById('som-pergaminho');
 
+    if (!modal || !overlay || !lista || !som) {
+        console.error('❌ Elementos do pergaminho não encontrados!');
+        alert('Erro interno: elementos do pergaminho não foram carregados.');
+        return;
+    }
+
     // Limpa a lista e mostra loading
     lista.innerHTML = '<li style="text-align:center; color:#3e2f1c; font-style:italic;">Carregando...</li>';
+
+    const token = getAuthToken();
+    if (!token) {
+        console.warn('⚠️ Token ausente. Redirecionando para login...');
+        showPopup('🔒 Sessão expirada. Faça login novamente.');
+        setTimeout(() => window.location.href = '/login', 2000);
+        return;
+    }
+
+    console.log('📡 Fazendo fetch para:', `${API_BASE_URL}/api/carrinhos/${cartId}/itens`);
 
     fetch(`${API_BASE_URL}/api/carrinhos/${cartId}/itens`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
+            'Authorization': `Bearer ${token}`
         }
     })
     .then(res => {
-        if (!res.ok) throw new Error(`Falha na resposta: ${res.status}`);
+        if (!res.ok) {
+            throw new Error(`Falha na resposta: ${res.status} ${res.statusText}`);
+        }
         return res.json();
     })
     .then(data => {
+        console.log('✅ Itens recebidos:', data);
         lista.innerHTML = '';
-        
+
         if (data.length === 0) {
             lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
         } else {
@@ -181,8 +201,7 @@ function abrirPergaminho(cartId) {
                 const li = document.createElement('li');
                 li.innerHTML = `
                     ${item.name}
-                    <button class="btn delete-item-btn" 
-                            onclick="deletarItem(${item.id}, this.parentElement)">
+                    <button class="btn delete-item-btn" data-item-id="${item.id}">
                         🗑️
                     </button>
                 `;
@@ -190,60 +209,85 @@ function abrirPergaminho(cartId) {
             });
         }
 
+        // Mostra modal
         overlay.style.display = 'block';
         modal.style.display = 'block';
-        som.play();
+
+        // Tenta tocar som
+        som.play().catch(e => {
+            console.warn('🔇 Áudio não pôde ser reproduzido:', e);
+            // Mesmo sem som, continua
+        });
+
     })
     .catch(err => {
-        console.error('Erro ao carregar itens:', err);
-        lista.innerHTML = '<li style="text-align:center; color:#c62828;">Erro ao carregar</li>';
+        console.error('🚨 Erro ao carregar itens:', err);
+        let msg = 'Erro ao carregar itens';
+        if (err.message && err.message.includes('Failed to fetch')) {
+            msg = '❌ Erro de conexão<br>Verifique se o backend está rodando em http://localhost:8000';
+        } else if (err.message && err.message.includes('401')) {
+            msg = '🔒 Token inválido. Faça login novamente.';
+        }
+        lista.innerHTML = `<li style="text-align:center; color:#c62828;">${msg}</li>`;
     });
 }
 
-// Deletar item específico (COM AUTENTICAÇÃO E URL CORRETA)
-function deletarItem(itemId, liElement) {
-    if (!confirm('Tem certeza que deseja deletar este item?')) return;
+// Deletar item com delegação de evento (CORRIGIDO)
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('delete-item-btn')) {
+        const itemId = e.target.getAttribute('data-item-id');
+        const li = e.target.closest('li');
+        if (!itemId || !li) return;
 
-    const token = getAuthToken();
-    if (!token) {
-        showPopup('🔒 Sessão expirada. Faça login novamente.');
-        setTimeout(() => window.location.href = '/login', 2000);
-        return;
-    }
+        if (!confirm('Tem certeza que deseja deletar este item?')) return;
 
-    fetch(`${API_BASE_URL}/api/itens/${itemId}`, { 
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`
+        const token = getAuthToken();
+        if (!token) {
+            showPopup('🔒 Sessão expirada. Faça login novamente.');
+            setTimeout(() => window.location.href = '/login', 2000);
+            return;
         }
-    })
-    .then(res => {
-        if (res.ok) {
-            liElement.remove();
-            showPopup('✅ Item deletado!');
-            
-            const lista = document.getElementById('lista-itens-modal');
-            if (lista && lista.children.length === 0) {
-                lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
+
+        fetch(`${API_BASE_URL}/api/itens/${itemId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-        } else {
-            if (res.status === 401) {
-                showPopup('🔒 Token inválido. Faça login novamente.');
-                setTimeout(() => window.location.href = '/login', 2000);
-            } else if (res.status === 404) {
-                showPopup('❌ Item não encontrado.');
+        })
+        .then(res => {
+            if (res.ok) {
+                li.remove();
+                showPopup('✅ Item deletado!');
+                const lista = document.getElementById('lista-itens-modal');
+                if (lista && lista.children.length === 0) {
+                    lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
+                }
             } else {
-                showPopup(`❌ Erro: ${res.status}`);
+                if (res.status === 401) {
+                    showPopup('🔒 Token inválido. Faça login novamente.');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                } else if (res.status === 404) {
+                    showPopup('❌ Item não encontrado.');
+                } else {
+                    showPopup(`❌ Erro: ${res.status}`);
+                }
             }
-        }
-    })
-    .catch(err => {
-        console.error('Erro de rede:', err);
-        showPopup('🌐 Erro de conexão com o servidor');
-    });
-}
+        })
+        .catch(err => {
+            console.error('Erro de rede:', err);
+            showPopup('🌐 Erro de conexão com o servidor');
+        });
+    }
+});
 
 // Fechar pergaminho
+function fecharPergaminho() {
+    const modal = document.getElementById('pergaminho-modal');
+    const overlay = document.getElementById('pergaminho-overlay');
+    if (modal) modal.style.display = 'none';
+    if (overlay) overlay.style.display = 'none';
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const fecharBtn = document.getElementById('fechar-pergaminho');
     const overlay = document.getElementById('pergaminho-overlay');
@@ -255,11 +299,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (overlay) {
         overlay.addEventListener('click', fecharPergaminho);
     }
-    
-    function fecharPergaminho() {
-        document.getElementById('pergaminho-modal').style.display = 'none';
-        document.getElementById('pergaminho-overlay').style.display = 'none';
-    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') fecharPergaminho();
+    });
 });
 
 // Expõe funções globais

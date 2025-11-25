@@ -110,15 +110,6 @@ def add_to_cart(cart_id):
                            headers=get_auth_headers())
     return redirect(url_for("index")) if response.status_code == 200 else redirect(url_for("index"))
 
-@app.route("/api/carrinhos/<int:cart_id>/itens")
-@login_required
-def get_cart_items(cart_id):
-    response = requests.get(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}/itens",
-                           headers=get_auth_headers())
-    if response.status_code == 200:
-        return jsonify(response.json())
-    return jsonify({"error": "Carrinho não encontrado"}), 404
-
 @app.route("/add_bulk/<int:cart_id>", methods=["POST"])
 @login_required
 def add_bulk(cart_id):
