@@ -39,13 +39,13 @@ PostgreSQL 12+
 
 🛠️ Passo a Passo para Rodar o Projeto
 1. Clone o repositório
-``` git clone https://github.com/seu-usuario/ListaCompras.git 
-cd ListaCompras ```
+git clone https://github.com/seu-usuario/ListaCompras.git 
+cd ListaCompras 
 
 2. Crie e ative o ambiente virtual
 Windows (PowerShell):
-``` python -m venv venv
-.\venv\Scripts\Activate.ps1 ```
+ python -m venv venv
+.\venv\Scripts\Activate.ps1 
 ⚠️ Se aparecer erro de execução de scripts, abra o PowerShell como administrador e execute uma vez:
 ```  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser ```
 
@@ -176,5 +176,6 @@ Feito com ❤️ para quem acredita que tecnologia deve ser acessível, elegante
 Basta seguir os passos acima — e em menos de 5 minutos, você terá seu próprio sistema de lista de compras rodando localmente.
 
 Boa sorte, e divirta-se! 🛒✨
+
 
 
