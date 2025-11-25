@@ -91,22 +91,6 @@ Crie uma conta
 Faça login
 Crie carrinhos, adicione itens e use o pergaminho mágico! 
 ---
-
-🗂️ Estrutura do Projeto
-ListaCompras/
-├── backend/               # API REST com FastAPI
-│   ├── main.py            # Ponto de entrada (com CORS configurado)
-│   ├── models.py          # Modelos SQLAlchemy (User, Cart, Item)
-│   ├── database.py        # Conexão com PostgreSQL
-│   └── routes/            # Rotas de autenticação e carrinhos
-├── frontend/              # Interface com Flask + Jinja2
-│   ├── app.py             # App Flask com Flask-Login
-│   ├── templates/         # HTML com efeitos de pergaminho
-│   └── static/            # CSS, JS e áudio (scroll-open.mp3)
-├── .env                   # Variáveis de ambiente (ex: DATABASE_URL)
-├── requirements.txt       # Todas as dependências
-└── README.md              # Este arquivo!
----
 📬 Dúvidas ou Problemas?
 Se você seguiu todos os passos e ainda assim não funcionou, sinta-se à vontade para entrar em contato!
 
@@ -125,6 +109,7 @@ Basta seguir os passos acima — e em menos de 5 minutos, você terá seu própr
 
 Boa sorte, e divirta-se! 🛒✨
 ---
+
 
 
 
