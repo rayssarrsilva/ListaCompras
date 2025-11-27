@@ -3,44 +3,48 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from models import User
-from database import get_db
+from backend.database import get_db
 from security import create_access_token
 
 router = APIRouter(prefix="/api", tags=["Auth"])
+
 
 class UserCreate(BaseModel):
     username: str
     password: str
 
+
 class UserLogin(BaseModel):
     username: str
     password: str
 
+
 @router.post("/register")
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
-    print(f"✅ Tentando registrar: {user_data.username}")
+
+    # 🔎 Diagnóstico (temporário)
+    print("✅ ENGINE USADA NA ROTA:", db.bind.url)
+
+    if db.query(User).filter_by(username=user_data.username).first():
+        print(f"❌ Usuário já existe: {user_data.username}")
+        raise HTTPException(status_code=400, detail="Nome de usuário já existe")
+
     try:
-        # Verifica se usuário já existe
-        if db.query(User).filter_by(username=user_data.username).first():
-            print(f"❌ Usuário já existe: {user_data.username}")
-            raise HTTPException(status_code=400, detail="Nome de usuário já existe")
-        
-        # Cria novo usuário
         new_user = User(username=user_data.username)
         new_user.set_password(user_data.password)
+
         db.add(new_user)
         db.commit()
-        db.refresh(new_user)  # ← ESSENCIAL: garante que o ID seja carregado
+        db.refresh(new_user)
+
         print(f"✅ Usuário criado com ID {new_user.id}: {new_user.username}")
         return {"message": "Conta criada com sucesso"}
-        
-    except HTTPException:
-        # Re-lança exceções HTTP
-        raise
+
     except Exception as e:
         print(f"❌ Erro inesperado ao registrar: {str(e)}")
-        db.rollback()  # ← Evita transações quebradas
+        db.rollback()
         raise HTTPException(status_code=500, detail="Erro interno do servidor")
+
 
 @router.post("/login")
 def login(user_data: UserLogin, db: Session = Depends(get_db)):

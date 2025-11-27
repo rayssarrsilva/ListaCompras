@@ -4,3 +4,7 @@ python -m pytest test_app.py
 3. Rodando um teste específico dentro do arquivo
 python -m pytest test_app.py::test_login
 
+Roda e limpa o cache de mensagens anteriores 
+python -m pytest --cache-clear
+
+python -m pytest -s
