@@ -30,35 +30,59 @@ def get_auth_headers():
 # --- Autenticação ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == 'GET':
+        session.pop('_flashes', None)
+        return render_template('login.html')
+    
+    # DEBUG: Log da tentativa de login
+    username = request.form['username']
+    password = request.form['password']
+    print(f"🔍 Tentando login: {username}")
+    
+    try:
         response = requests.post(f"{FASTAPI_BASE_URL}/api/login",
-                               json={"username": username, "password": password})
+                               json={"username": username, "password": password},
+                               timeout=10)
+        print(f"🔍 Resposta API - Status: {response.status_code}")
+        print(f"🔍 Resposta API - Body: {response.text}")
+        
         if response.status_code == 200:
             data = response.json()
             session["access_token"] = data["access_token"]
             session["username"] = username
-            user = User(1)  # Simula ID (não usado no backend)
+            print(f"✅ Login bem-sucedido para: {username}")
+            
+            user = User(1)
             from flask_login import login_user
             login_user(user)
             return redirect(url_for('index'))
         else:
+            print(f"❌ Login falhou - Status: {response.status_code}")
             flash('Usuário ou senha inválidos.', 'error')
-    return render_template('login.html')
+            
+    except Exception as e:
+        print(f"🔥 Erro na requisição: {str(e)}")
+        flash('Erro de conexão com o servidor.', 'error')
+    
+    return redirect(url_for('login'))
 
+# Na rota de register, substitua TUDO por:
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        response = requests.post(f"{FASTAPI_BASE_URL}/api/register",
-                               json={"username": username, "password": password})
-        if response.status_code == 200:
-            flash('Conta criada com sucesso! Faça login.', 'success')
-            return redirect(url_for('login'))
-        else:
-            flash('Nome de usuário já existe.', 'error')
+        # Teste manual SIMPLES
+        import requests
+        try:
+            resp = requests.post('http://localhost:8000/api/register',
+                               json={'username': request.form['username'], 
+                                     'password': request.form['password']},
+                               timeout=3)
+            if resp.status_code == 200:
+                return redirect('/login')
+            else:
+                return f"Erro API: {resp.text}"
+        except Exception as e:
+            return f"Erro conexão: {str(e)}"
     return render_template('register.html')
 
 @app.route('/logout')
@@ -85,14 +109,14 @@ def create_cart():
     response = requests.post(f"{FASTAPI_BASE_URL}/api/carrinhos",
                            json={"name": cart_name},
                            headers=get_auth_headers())
-    return redirect(url_for("index")) if response.status_code == 200 else redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 @app.route("/delete/<int:cart_id>", methods=["POST"])
 @login_required
 def delete_cart(cart_id):
     response = requests.delete(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}",
                               headers=get_auth_headers())
-    return redirect(url_for("index")) if response.status_code == 200 else redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 @app.route("/select_cart", methods=["POST"])
 @login_required
@@ -108,7 +132,7 @@ def add_to_cart(cart_id):
     response = requests.post(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}/itens",
                            json={"name": name},
                            headers=get_auth_headers())
-    return redirect(url_for("index")) if response.status_code == 200 else redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 @app.route("/api/carrinhos/<int:cart_id>/itens")
 @login_required
@@ -127,7 +151,7 @@ def add_bulk(cart_id):
     response = requests.post(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}/bulk",
                            json={"items": item_names},
                            headers=get_auth_headers())
-    return redirect(url_for("index")) if response.status_code == 200 else redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=5000)

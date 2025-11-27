@@ -1,10 +1,18 @@
 # backend/main.py
+import sys
+import os
+
+# Adiciona a pasta backend ao path
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .models import Base          # ← Importa Base do models.py (na mesma pasta)
-from .database import engine      # ← Importa engine do database.py (na mesma pasta)
-from .routes.auth import router as auth_router
-from .routes.carts import router as cart_router
+from models import Base
+from database import engine
+from routes.auth import router as auth_router
+from routes.carts import router as cart_router
 
 Base.metadata.create_all(bind=engine)
 

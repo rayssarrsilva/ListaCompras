@@ -5,12 +5,12 @@
   <section class="login-section">
     <h2 class="login-title">📝 Crie sua Conta</h2>
 
-    <form method="POST" action="{{ url_for('register') }}" class="login-form">
+    <form method="POST" action="{{ url_for('register') }}" class="login-form" autocomplete="off">
       <label for="username">Usuário</label>
-      <input type="text" name="username" id="username" placeholder="Escolha um nome de usuário" required>
+      <input type="text" name="username" id="username" placeholder="Escolha um nome de usuário" required autocomplete="off">
 
       <label for="password">Senha</label>
-      <input type="password" name="password" id="password" placeholder="Crie uma senha segura" required>
+      <input type="password" name="password" id="password" placeholder="Crie uma senha segura" required autocomplete="new-password">
 
       <button type="submit" class="btn btn-primary">Registrar</button>
     </form>
