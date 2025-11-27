@@ -1,57 +1,45 @@
-# backend/tests/conftest.py
+import os
 import pytest
-from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
-from backend.main import app
-from backend.database import get_db
-from backend.models import Base, User  # ← Base vem de models.py
-from passlib.context import CryptContext
+from backend.models import Base
+from backend.database import get_db, engine
+from backend.main import app as fastapi_app
+from fastapi.testclient import TestClient
 
-# Garante que os modelos sejam carregados
-import backend.models
-import backend.routes.carts
-import backend.routes.auth
+# --- Configurações para banco de teste ---
+TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "postgresql://postgres:123@localhost:5432/listacompras_test")
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    poolclass=StaticPool,
-)
+engine_test = create_engine(TEST_DATABASE_URL)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine_test)
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():
-    Base.metadata.create_all(bind=engine)
+    # Cria todas as tabelas no banco de teste
+    Base.metadata.drop_all(bind=engine_test)
+    Base.metadata.create_all(bind=engine_test)
     yield
-    Base.metadata.drop_all(bind=engine)
+    # Após os testes, opcional: limpar tudo
+    Base.metadata.drop_all(bind=engine_test)
 
-@pytest.fixture
-def test_db():
-    connection = engine.connect()
-    transaction = connection.begin()
-    session = sessionmaker(bind=connection)()
-    yield session
-    session.close()
-    transaction.rollback()
-    connection.close()
+@pytest.fixture()
+def db_session():
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@pytest.fixture
-def client(test_db):
-    def override_get_db():
-        yield test_db
-    app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as c:
-        yield c
-    app.dependency_overrides.clear()
+# Sobrescrever get_db para usar o session de teste
+@pytest.fixture(autouse=True)
+def override_get_db(monkeypatch, db_session):
+    def _get_test_db():
+        try:
+            yield db_session
+        finally:
+            pass
+    monkeypatch.setattr("backend.database.get_db", _get_test_db)
 
-@pytest.fixture
-def test_user(test_db):
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    hashed_pw = pwd_context.hash("testpass")
-    user = User(username="testuser", password_hash=hashed_pw)
-    test_db.add(user)
-    test_db.commit()
-    test_db.refresh(user)
-    return {"username": "testuser", "password": "testpass"}
+@pytest.fixture()
+def client():
+    return TestClient(fastapi_app)

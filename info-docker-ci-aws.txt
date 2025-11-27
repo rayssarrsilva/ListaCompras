@@ -1,0 +1,37 @@
+BANCO DE DADOS:
+- Desenvolvimento: listacompras
+- Testes (pytest): listacompras_test
+- Produção futura: listacompras_prod
+
+ESTRUTURA:
+- Backend contém a pasta /tests
+- Pytest é rodado dentro de /backend
+- Nunca rodar pytest na raiz do projeto
+
+FUTURO - DOCKER:
+- Terá 2 containers:
+  1) API FastAPI
+  2) PostgreSQL
+- Será criado:
+  - DATABASE_URL para produção
+  - DATABASE_URL_TEST para pytest
+- Pytest pode rodar dentro do container
+
+FUTURO - CI/CD (GitHub Actions):
+- Workflow:
+  1) subir banco PostgreSQL temporário
+  2) rodar pytest
+  3) se passar: permitir deploy
+  4) se falhar: bloquear merge
+
+AWS / SERVER GRÁTIS:
+- AWS free tier: EC2 e RDS SIM (mas com limites)
+- Alternativas grátis:
+   - Railway
+   - Render
+   - Supabase (Postgres)
+   - Fly.io
+   
+RECOMENDAÇÃO:
+- Enquanto estuda → Railway ou Supabase
+- Produção real → AWS ou Fly.io
