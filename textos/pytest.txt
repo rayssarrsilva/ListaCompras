@@ -8,3 +8,14 @@ Roda e limpa o cache de mensagens anteriores
 python -m pytest --cache-clear
 
 python -m pytest -s
+
+Vai validar:
+
+✔ Se o usuário NÃO estiver logado → é redirecionado para /login
+✔ Se estiver logado → carrega a página index corretamente
+✔ Se a lista de carrinhos da API aparece
+✔ Se é possível criar um carrinho
+✔ Se é possível excluir um carrinho
+✔ Se é possível selecionar um carrinho
+✔ Se a página não quebra mesmo sem carrinhos
+✔ Se o token é enviado corretamente

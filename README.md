@@ -111,4 +111,37 @@ Acesse no navegador:
 
 Aproveite e faça várias listas de compras :)
 
+---
+## 🧪 Como rodar os testes automatizados (Pytest + PostgreSQL)
 
+1. Criar o banco de dados de teste no PostgreSQL
+Você deve criar manualmente (no pgAdmin ou no terminal) um banco chamado: **listacompras_test**
+
+Passo a Passo:
+1- Pelo pgAdmin:
+
+2- Clique com botão direito em Databases
+
+3- Create > Database
+
+4- Em Database name: listacompras_test
+5- Save
+
+📌 Por que esse banco existe?
+Ele é usado exclusivamente pelos testes, para que seu banco real não seja afetado.
+
+5. Configurar o arquivo .env
+
+Crie um arquivo .env dentro da pasta backend e insira:
+TEST_DATABASE_URL=postgresql://postgres:SENHA@localhost:5432/listacompras_test
+
+6. Rodar os testes com Pytest
+
+Dentro da pasta /backend, execute: python -m pytest
+
+Se tudo estiver correto, o resultado esperado é algo como:
+===================== 5 passed in 1.22s =====================
+
+7. (Opcional) Ver o teste rodando com prints
+python -m pytest -s
+---
