@@ -146,7 +146,7 @@ Se tudo estiver correto, o resultado esperado é algo como:
 python -m pytest -s
 
 ---
-📦 Docker — Instalação e Configuração
+## 📦 Docker — Instalação e Configuração
 
 Para rodar o sistema utilizando containers, é necessário instalar o Docker Desktop.
 O Docker será usado para gerenciar o ambiente da aplicação e do banco de dados.
@@ -178,3 +178,4 @@ wsl --install
 docker --version
 docker run hello-world
 Se aparecer a mensagem “Hello from Docker!”, a instalação está correta.
+
