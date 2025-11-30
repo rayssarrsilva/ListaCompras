@@ -3,3 +3,6 @@ docker compose down
 
 2️⃣ Reconstruir tudo (obrigatório!)
 docker compose up --build
+
+down -v apaga volumes (limpa o banco antes de recriar)
+docker compose down -v
