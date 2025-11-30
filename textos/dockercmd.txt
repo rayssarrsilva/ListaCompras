@@ -1,0 +1,5 @@
+1️⃣ Parar tudo
+docker compose down
+
+2️⃣ Reconstruir tudo (obrigatório!)
+docker compose up --build

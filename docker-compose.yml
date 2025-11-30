@@ -1,17 +1,13 @@
-version: "3.8"
-
 services:
   db:
     image: postgres:15
     restart: unless-stopped
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: listacompras
+    env_file:
+      - .env   # carrega POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB (da raiz)
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d listacompras"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -23,17 +19,17 @@ services:
     container_name: lista_backend
     restart: unless-stopped
     env_file:
-      - .env   # carrega SECRET_KEY e (opcional) DATABASE_URL
-    environment:
-      # Força DATABASE_URL to point to the DB service inside compose network
-      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:123@db:5432/listacompras}
+      - backend/.env   # carrega SECRET_KEY, DATABASE_URL, etc
     ports:
       - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - ./backend:/app   # syncroniza código (dev)
+      - ./backend:/app
+    environment:
+      # GARANTE que mesmo se backend/.env tiver localhost, docker FORCE o correto
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
       interval: 5s
@@ -48,16 +44,15 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    environment:
-      # Frontend points to backend by service name when inside the same network
-      # Use this URL in JS when needed, but your frontend calls the backend via Flask server so fine.
-      FASTAPI_BASE_URL: ${FASTAPI_BASE_URL:-http://backend:8000}
     ports:
       - "5000:5000"
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app   # syncroniza código local <-> container (dev)
+      - ./frontend:/app
+    environment:
+      # Frontend acessa backend pelo nome do serviço
+      FASTAPI_BASE_URL: http://backend:8000
 
 volumes:
   db_data:
