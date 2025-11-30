@@ -21,11 +21,14 @@ docker ps
 
 → Útil se você quiser reiniciar depois sem recriar.
 docker compose stop
+docker compose start
 
 Parar um container específico:
 docker stop nome_do_container
 
 → Para e remove os containers, mas mantém volumes e imagens.
 docker compose down
+docker compose up
 
 docker compose down -v
+docker compose up --build
