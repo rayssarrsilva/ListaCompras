@@ -18,13 +18,13 @@ app = FastAPI(title="Lista de Compras API")
 # CORS aberto para funcionar no Docker, local e deploy
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # facilitar desenvolvimento + containers
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 🚫 REMOVIDO: create_all (não desejável em produção/Docker)
+# ❗ deixado exatamente como estava
 # Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_router)
