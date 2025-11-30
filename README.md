@@ -179,3 +179,43 @@ docker --version
 docker run hello-world
 Se aparecer a mensagem “Hello from Docker!”, a instalação está correta.
 
+## ▶️ Como rodar com Docker
+Abra o terminal na raiz do projeto (onde está o docker-compose.yml).
+Crie os arquivos de variáveis de ambiente:
+.env (na raiz do projeto):
+POSTGRES_DB=listacompras
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=123
+SECRET_KEY=sua_secret_qualquer
+
+backend/.env (dentro da pasta backend):
+DATABASE_URL=postgresql://postgres:123@db:5432/listacompras
+SECRET_KEY=sua_secret_qualquer ( a msm da outra)
+
+Suba os containers:
+docker compose up --build
+
+✅ O comando:
+
+Cria e inicia o PostgreSQL, FastAPI (backend) e Flask (frontend)
+Cria automaticamente as tabelas no banco
+
+Expõe:
+
+Frontend: http://localhost:5000
+Documentação da API: http://localhost:8000/docs
+
+🛑 Como parar e limpar tudo
+Parar os containers (mantém dados):
+docker compose down
+
+Parar e apagar tudo (incluindo o banco de dados):
+docker compose down -v
+
+####💡 Dicas de Desenvolvimento com Docker
+As pastas ./frontend e ./backend são montadas nos containers via volumes, então alterações no código são refletidas imediatamente (sem precisar reconstruir).
+O backend usa --reload (Uvicorn), então reinicia automaticamente ao salvar arquivos Python.
+
+Para ver logs em tempo real:
+docker compose logs -f
+
