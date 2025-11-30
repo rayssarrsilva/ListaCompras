@@ -1,0 +1,12 @@
+Agora, tudo que você alterar (Dockerfile, .env, ajustes de código) vai ficar só em docker-setup.
+
+
+git checkout -b docker-setup
+
+Quando terminar e testar, você faz:
+
+bash
+git add .
+git commit -m "Configuração Docker"
+git checkout main
+git merge docker-setup
