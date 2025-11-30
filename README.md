@@ -144,4 +144,38 @@ Se tudo estiver correto, o resultado esperado é algo como:
 
 7. (Opcional) Ver o teste rodando com prints
 python -m pytest -s
+
 ---
+## 📦 Docker — Instalação e Configuração
+
+Para rodar o sistema utilizando containers, é necessário instalar o Docker Desktop.
+O Docker será usado para gerenciar o ambiente da aplicação e do banco de dados.
+
+1. Instalação do Docker Desktop (Windows)
+
+Baixar o Docker Desktop:
+https://www.docker.com/products/docker-desktop
+
+Executar o instalador .exe.
+
+Marcar a opção:
+
+Use WSL2 instead of Hyper-V
+
+Finalizar a instalação e reiniciar o computador se solicitado.
+
+2. Pré-requisitos
+
+Windows 10/11 64 bits
+
+Virtualização habilitada na BIOS
+
+WSL2 instalado (apenas para Windows Home)
+Para instalar o WSL2 (Após a instalação, reinicie o computador):
+wsl --install
+
+3. Verificando se o Docker funciona
+docker --version
+docker run hello-world
+Se aparecer a mensagem “Hello from Docker!”, a instalação está correta.
+
