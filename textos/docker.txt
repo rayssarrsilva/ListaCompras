@@ -13,3 +13,18 @@ Dados/volumes → down -v + up --build
 
 docker compose down -v
 docker compose up --build
+
+Se notar comportamento estranho, rode (Limpa containers parados, imagens não usadas e cache): docker system prune -af
+
+→ Lista containers ativos e ajuda a confirmar se tudo está rodando.
+docker ps
+
+→ Útil se você quiser reiniciar depois sem recriar.
+docker compose stop
+
+Parar um container específico:
+docker stop nome_do_container
+
+→ Para e remove os containers, mas mantém volumes e imagens.
+docker compose down
+
