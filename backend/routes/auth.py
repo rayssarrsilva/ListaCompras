@@ -7,8 +7,7 @@ from models import User
 from database import get_db
 from security import create_access_token
 
-router = APIRouter(prefix="/api", tags=["Auth"])
-
+router = APIRouter(tags=["Auth"])
 
 class UserCreate(BaseModel):
     username: str
@@ -62,7 +61,7 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
             raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
 
         # ✅ Corrigido: o token deve receber data={"sub": id}
-        token = create_access_token({"sub": str(user.id)})
+        token = create_access_token(user.id)  # ← só o ID inteiro
 
         print(f"✅ Login bem-sucedido para: {user.username} (ID: {user.id})")
         return {"access_token": token, "token_type": 'bearer'}

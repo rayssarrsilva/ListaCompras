@@ -13,7 +13,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-FASTAPI_BASE_URL = "http://localhost:8000"
+FASTAPI_BASE_URL = os.getenv("FASTAPI_BASE_URL", "http://backend:8000")
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -66,17 +66,14 @@ def login():
     
     return redirect(url_for('login'))
 
-# Na rota de register, substitua TUDO por:
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        # Teste manual SIMPLES
-        import requests
         try:
-            resp = requests.post('http://localhost:8000/api/register',
+            resp = requests.post(f"{FASTAPI_BASE_URL}/api/register",
                                json={'username': request.form['username'], 
                                      'password': request.form['password']},
-                               timeout=3)
+                               timeout=10)
             if resp.status_code == 200:
                 return redirect('/login')
             else:

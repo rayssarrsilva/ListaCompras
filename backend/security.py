@@ -19,16 +19,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def create_access_token(user_id: int):
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-
     payload = {
         "sub": str(user_id),
         "exp": expire,
         "iat": datetime.now(timezone.utc),
-        "nbf": datetime.now(timezone.utc)
+        # "nbf": datetime.now(timezone.utc)  ← REMOVA ESSA LINHA
     }
-
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-
 
 def get_current_user(
     token: str = Depends(oauth2_scheme),

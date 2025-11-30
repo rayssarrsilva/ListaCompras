@@ -1,7 +1,6 @@
 import sys
 import os
 
-# Ajuste de path (não prejudica no Docker, mas mantém compatibilidade local)
 backend_dir = os.path.dirname(os.path.abspath(__file__))
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
@@ -13,9 +12,11 @@ from database import engine
 from routes.auth import router as auth_router
 from routes.carts import router as cart_router
 
+# ✅ CRIA AS TABELAS NO BANCO (se não existirem)
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(title="Lista de Compras API")
 
-# CORS aberto para funcionar no Docker, local e deploy
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -24,11 +25,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ❗ deixado exatamente como estava
-# Base.metadata.create_all(bind=engine)
-
-app.include_router(auth_router)
-app.include_router(cart_router)
+app.include_router(auth_router, prefix="/api")
+app.include_router(cart_router, prefix="/api")
 
 @app.get("/")
 def root():

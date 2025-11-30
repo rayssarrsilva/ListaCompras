@@ -6,3 +6,10 @@ docker compose up --build
 
 down -v apaga volumes (limpa o banco antes de recriar)
 docker compose down -v
+
+Código → up --build
+Configuração/env → down + up
+Dados/volumes → down -v + up --build
+
+docker compose down -v
+docker compose up --build

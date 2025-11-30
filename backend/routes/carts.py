@@ -6,8 +6,7 @@ from models import Cart, Item, User
 from database import get_db
 from security import get_current_user
 
-router = APIRouter(prefix="/api", tags=["Carrinhos"])
-
+router = APIRouter(tags=["Carrinhos"])
 
 class CartCreate(BaseModel):
     name: str
