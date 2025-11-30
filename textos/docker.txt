@@ -28,3 +28,4 @@ docker stop nome_do_container
 → Para e remove os containers, mas mantém volumes e imagens.
 docker compose down
 
+docker compose down -v
