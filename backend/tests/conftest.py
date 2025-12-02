@@ -3,7 +3,6 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
-
 from backend.models import Base
 from backend.main import app
 from backend.database import get_db
@@ -24,7 +23,6 @@ TestingSessionLocal = sessionmaker(
 )
 
 
-# 🔥 Cria e limpa o banco INTEIRO
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():
     print("✅ BANCO DE TESTE EM USO:", TEST_DATABASE_URL)
@@ -33,9 +31,6 @@ def setup_test_db():
     yield
     Base.metadata.drop_all(bind=engine_test)
 
-
-# 🔁 Limpa tabelas a cada teste (isolamento real)
-from sqlalchemy import text
 
 @pytest.fixture(autouse=True)
 def clean_tables():
@@ -48,7 +43,6 @@ def clean_tables():
         trans.commit()
 
 
-# 🔄 Sessão isolada
 @pytest.fixture()
 def db_session():
     db = TestingSessionLocal()
@@ -58,7 +52,6 @@ def db_session():
         db.close()
 
 
-# 💡 Sobrescrita REAL do get_db
 @pytest.fixture(autouse=True)
 def override_get_db(db_session):
     def _get_test_db():

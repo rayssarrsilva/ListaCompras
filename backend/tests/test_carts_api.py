@@ -1,5 +1,6 @@
 import pytest
 
+
 def perform_auth_and_get_token(client):
     # cria usuário
     client.post("/api/register", json={"username": "cartuser", "password": "senha"})
@@ -10,6 +11,7 @@ def perform_auth_and_get_token(client):
 def auth_headers(client):
     token = perform_auth_and_get_token(client)
     return {"Authorization": f"Bearer {token}"}
+
 
 def test_create_and_list_cart(client, auth_headers):
     # Cria carrinho
@@ -23,6 +25,7 @@ def test_create_and_list_cart(client, auth_headers):
     assert resp.status_code == 200
     carts = resp.json()
     assert any(c["name"] == "Carrinho 1" for c in carts)
+
 
 def test_add_item_and_list_items(client, auth_headers):
     # Cria carrinho

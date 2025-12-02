@@ -1,9 +1,8 @@
-import pytest
 
 def test_protected_routes_without_token(client):
     protected = [
-        ( "GET", "/api/carrinhos" ),
-        ( "POST", "/api/carrinhos", {"name": "Cart Test"} ),
+        ("GET", "/api/carrinhos"),
+        ("POST", "/api/carrinhos", {"name": "Cart Test"}),
     ]
     for method, path, *rest in protected:
         if method == "GET":

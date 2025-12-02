@@ -1,0 +1,45 @@
+✅ 2. O que SEU CI está testando hoje
+
+Seu ci.yml executa 3 coisas IMPORTANTES:
+
+(1) Lint — flake8
+
+Ele está verificando:
+
+erros de sintaxe
+imports não usados
+variáveis não usadas
+quebra de estilo
+linhas maiores que 120 chars
+
+Se isso quebrar → CI fica vermelho.
+----
+(2) Testes automáticos — pytest
+
+Seu CI roda exatamente isso:
+
+pytest -q --disable-warnings --maxfail=1
+
+
+Isso significa:
+
+Executa TODOS os testes do backend
+Para na primeira falha
+Se não houver nenhum teste → NÃO QUEBRA
+Apenas marca como sucesso
+
+Se você não tiver testes, o pytest roda vazio, mas passa.
+---
+(3) Build da sua aplicação Docker
+
+O CI roda:
+docker compose -f docker-compose.yml build
+
+
+Ou seja:
+
+testa build da imagem backend
+testa build da imagem frontend
+se o build quebrar → ❌ vermelho
+
+Isso é essencial para evitar deploy que quebra.
