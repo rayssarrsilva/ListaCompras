@@ -43,3 +43,10 @@ testa build da imagem frontend
 se o build quebrar → ❌ vermelho
 
 Isso é essencial para evitar deploy que quebra.
+
+-------------
+CI ---> backend/
+1- imports com backend.arquivo 
+2- 2 linhas de espaços pra cada classe, funcao, routes (variavel)
+3- imports no inicio do arquivo 
+4- 1 linha sobrando no final do arquivo 
