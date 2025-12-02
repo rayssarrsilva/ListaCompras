@@ -38,3 +38,4 @@ ListaCompras/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+
