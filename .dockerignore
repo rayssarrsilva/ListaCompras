@@ -1,0 +1,11 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.VSCode/
+.git/
+.gitignore
+*.sqlite3
+/tests/

@@ -1,122 +1,34 @@
-Quando estiver usando Docker, não rode flask run, uvicorn main:app, python app.py nem nada local.
+1️⃣ Parar tudo
+docker compose down
 
-apenas docker compose up ou docker compose up --build
+2️⃣ Reconstruir tudo (obrigatório!)
+docker compose up --build
 
----
-garantir que:
+down -v apaga volumes (limpa o banco antes de recriar)
+docker compose down -v
 
-local = usa .env.local (ou o próprio .env)
+Código → up --build
+Configuração/env → down + up
+Dados/volumes → down -v + up --build
 
-docker = usa .env.docker ou variáveis definidas no compose, porque dentro do Docker o host NUNCA é localhost
-errado p docker: DATABASE_URL=postgresql://postgres:123@localhost:5432/meubanco
-certo: postgres://postgres:123@db:5432/meubanco
----
-Docker não vai usar o seu PostgreSQL local
-Dentro do Docker, o app só enxerga o banco rodando dentro do Docker, não o da sua máquina. 
+docker compose down -v
+docker compose up --build
 
-Você vai ter:
+Se notar comportamento estranho, rode (Limpa containers parados, imagens não usadas e cache): docker system prune -af
 
-um PostgreSQL local, instalado na máquina
-um PostgreSQL dentro do Docker (container)
-talvez até um PostgreSQL na AWS RDS no futuro
----
-Se você mudar arquivos no seu projeto e eles não refletirem dentro do Docker, provavelmente você esqueceu:
-volumes:
-  - .:/app
-isso é útil no desenvolvimento, e perigoso em produção.
- verificar isso  quando criar docker-compose.yml.
- ---
- portas
- Flask → geralmente porta 5000
-FastAPI → geralmente porta 8000
-PostgreSQL → porta 5432
+→ Lista containers ativos e ajuda a confirmar se tudo está rodando.
+docker ps
 
-Se sua máquina já tiver:
-PostgreSQL local rodando na 5432
+→ Útil se você quiser reiniciar depois sem recriar.
+docker compose stop
+docker compose start
 
-O container vai falhar ao iniciar o serviço db
-Solução: trocar a porta externa: 5433:5432
----
-O pytest precisa rodar dentro do container, não local
+Parar um container específico:
+docker stop nome_do_container
 
-Porque:
+→ Para e remove os containers, mas mantém volumes e imagens.
+docker compose down
+docker compose up
 
-local = usa Python local + dependências locais
-docker = usa Python docker + libs docker
-
-Se você rodar: pytest, Ele pega o ambiente errado. O certo é: docker compose exec app pytest
----
-Quando você estiver com Docker + PostgreSQL… NADA local deve mexer no banco
-
-Por quê?
-
-Se você rodar local e docker ao mesmo tempo: CORROMPE O BANCO
-Se você rodar migrações local e depois docker: INCONSISTÊNCIA
-
-regra:
-docker compose up   → usa banco docker
-python local        → usa banco local
----
-Testes com pytest NÃO vão acessar seu banco local
-É que você deve escolher um ambiente único para o banco (local OU Docker) e não misturar.
-Se optar por Docker, tudo (FastAPI, Flask, migrations, testes) deve conversar com o banco do container.
-
-Configure seu .env para apontar para o banco do Docker (DATABASE_URL=postgresql://... com host do container).
-Rode docker compose up para subir Postgres + sua API.
-Faça testes/migrações sempre dentro desse ambiente.
-
-Eles vão acessar o banco do container de test.
-
-Ou você usa:
-
-um PostgreSQL separado para testes
-
-ou um SQLite isolado (mais simples)
-
-ou um "schema de teste" limpo no mesmo container
-
-📌 Quando chegarmos nos testes, me lembre de revisar com você o conftest.py.
-
-2. Configurar no pgAdmin
-Abra o pgAdmin → Add New Server → preencha:
-
-Name: qualquer nome (ex: Postgres Docker)
-
-Host:
-
-localhost se você mapeou a porta para sua máquina
-
-ou o nome do serviço (db) se estiver usando docker compose
-
-Port: 5432 (ou a porta que você expôs)
-
-Username: postgres (ou o usuário que você definiu)
-
-Password: a senha que você passou no POSTGRES_PASSWORD
----
-Logs e erros no Docker são diferentes
-Docker:
-docker compose logs app
------
-✔ 5. pytest vai rodar no backend via Docker
-
-O comando será:
-
-docker compose exec backend pytest
-
-
-E seus testes vão usar o PostgreSQL Docker, não o da sua máquina.
-
-
---------------
-Reverse branchs
-🔄 Caso se arrependa depois
-Se ainda não fez push, pode desfazer com:
-
-bash
-git reset --hard HEAD~1
-Se já fez push, use:
-
-bash
-git revert -m 1 <hash_do_merge>
-Isso cria um commit que desfaz o merge sem apagar o histórico.
+docker compose down -v
+docker compose up --build

@@ -2,12 +2,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+
 from models import User
-from backend.database import get_db
+from database import get_db
 from security import create_access_token
 
-router = APIRouter(prefix="/api", tags=["Auth"])
-
+router = APIRouter(tags=["Auth"])
 
 class UserCreate(BaseModel):
     username: str
@@ -51,18 +51,21 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
     print(f"🔍 Tentando login: {user_data.username}")
     try:
         user = db.query(User).filter_by(username=user_data.username).first()
+
         if not user:
             print(f"❌ Usuário não encontrado: {user_data.username}")
             raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
-        
+
         if not user.check_password(user_data.password):
             print(f"❌ Senha incorreta para: {user_data.username}")
             raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
-        
-        token = create_access_token({"sub": str(user.id)})
+
+        # ✅ Corrigido: o token deve receber data={"sub": id}
+        token = create_access_token(user.id)  # ← só o ID inteiro
+
         print(f"✅ Login bem-sucedido para: {user.username} (ID: {user.id})")
-        return {"access_token": token, "token_type": "bearer"}
-        
+        return {"access_token": token, "token_type": 'bearer'}
+
     except HTTPException:
         raise
     except Exception as e:
