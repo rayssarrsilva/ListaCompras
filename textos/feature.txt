@@ -1,4 +1,7 @@
 ListaCompras/
+├── .github/
+│   ├── workflows/
+│   └──ci.yml
 ├── backend/               ← API FastAPI (só JSON)
 │   ├──__init__.py
 │   ├── main.py

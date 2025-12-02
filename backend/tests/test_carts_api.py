@@ -7,6 +7,7 @@ def perform_auth_and_get_token(client):
     resp = client.post("/api/login", json={"username": "cartuser", "password": "senha"})
     return resp.json()["access_token"]
 
+
 @pytest.fixture()
 def auth_headers(client):
     token = perform_auth_and_get_token(client)
