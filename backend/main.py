@@ -26,6 +26,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api")
 app.include_router(cart_router, prefix="/api")
 
+
 @app.get("/")
 def root():
     return {"message": "API ListaCompras está rodando 🚀"}

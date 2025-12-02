@@ -20,3 +20,23 @@ Implantação Contínua (Continuous Deployment)
 3- Monitoramento & Feedback (Logs e métricas são coletados para verificar desempenho e erros; Alertas automáticos avisam se algo deu errado após a implantação.)
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+1. Vá em:
+
+👉 GitHub → Actions → CI Pipeline
+(link direto do seu repo: actions/workflows/ci.yml)
+
+Ali aparece isso:
+
+✔️ Verde = CI passou
+❌ Laranja/vermelho = CI falhou
+⏳ Azul = CI em execução
+
+Cada linha é uma execução (run) do seu CI.
+Clique no run com ❌ → ele abre os JOBS.
+
+----------
+O CI vai rodar de novo automaticamente quando você:
+
+der git push numa branch que tem CI
+abrir um pull request para a main
+der merge na main

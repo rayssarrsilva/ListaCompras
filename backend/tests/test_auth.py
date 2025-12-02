@@ -1,3 +1,5 @@
+
+
 def test_register_and_login_success(client):
     # Registro
     resp = client.post("/api/register", json={"username": "testuser", "password": "password123"})
@@ -11,6 +13,7 @@ def test_register_and_login_success(client):
     body = resp.json()
     assert "access_token" in body
     assert body.get("token_type") == "bearer"
+
 
 def test_register_duplicate_username(client):
     # Primeiro registro
