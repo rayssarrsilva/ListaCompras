@@ -1,12 +1,22 @@
 ListaCompras/
 ├── backend/               ← API FastAPI (só JSON)
+│   ├──__init__.py
 │   ├── main.py
 │   ├── database.py
 │   ├── models.py          ← SQLAlchemy puro (não Flask!)
 │   ├── security.py
+│   ├──Dockerfile
+│   ├── requirements
 │   ├── routes/
 │   │   ├── auth.py
 │   │   └── carts.py
+│   ├──__init__.py
+│   ├── tests/
+│   │   ├── conftest.py
+│   │   ├── __init__.py
+│   │   ├── test_auth.py
+│   │   ├──test_carts_api.py
+│   │   ├──teswt_routes_protection.py
 │   └── .env
 │
 ├── frontend/              ← Interface Flask (HTML/Jinja2)
@@ -16,8 +26,15 @@ ListaCompras/
 │   │   ├── login.html
 │   │   └── register.html
 │   ├── static/
+│   ├──Dockerfile
+│   ├──requirements.txt
 │   └── .env
 │
+├── venv/
+├──.dockerignore
+├──.env
+├──docker-compose.yml 
+├──env.exemple
 ├── .gitignore
 ├── requirements.txt
 └── README.md
