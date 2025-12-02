@@ -6,7 +6,7 @@ ListaCompras/
 │   ├── models.py          ← SQLAlchemy puro (não Flask!)
 │   ├── security.py
 │   ├──Dockerfile
-│   ├── requirements
+│   ├── requirements.txt
 │   ├── routes/
 │   │   ├── auth.py
 │   │   └── carts.py
