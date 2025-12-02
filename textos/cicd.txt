@@ -1,0 +1,22 @@
+🛒 Exemplo aplicado ao seu sistema de lista de compras
+Commit: você adiciona uma nova função, como “exportar lista em PDF”.
+Build: o pipeline compila o app.
+Testes: verifica se o PDF é gerado corretamente e se a soma dos itens continua funcionando.
+Entrega: gera uma versão do app pronta para ser usada.
+Implantação: publica automaticamente no servidor ou loja de apps.
+Monitoramento: acompanha se usuários conseguem baixar o PDF sem erros.
+
+Integração Contínua - CI
+1- envia o código para o repositório
+2- Testes unitários: verificam se cada função funciona isoladamente.
+3-Testes de integração: garantem que os módulos funcionem juntos.
+4-Testes de regressão: asseguram que novas mudanças não quebrem funcionalidades antigas.
+5-Ferramentas de linting e análise estática verificam padrões de código e segurança.
+6-Relatórios de cobertura de testes mostram se o código foi bem testado.
+
+Implantação Contínua (Continuous Deployment)
+1- Se configurado, a versão é automaticamente publicada em produção.
+2- Pode usar ferramentas como Docker + Kubernetes, ou serviços de nuvem (AWS, Azure, GCP).
+3- Monitoramento & Feedback (Logs e métricas são coletados para verificar desempenho e erros; Alertas automáticos avisam se algo deu errado após a implantação.)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
