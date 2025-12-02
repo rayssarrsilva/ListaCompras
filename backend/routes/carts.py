@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-
 from models import Cart, Item, User
 from database import get_db
 from security import get_current_user
 
+
 router = APIRouter(tags=["Carrinhos"])
+
 
 class CartCreate(BaseModel):
     name: str
@@ -18,6 +19,7 @@ class ItemCreate(BaseModel):
 
 class BulkItems(BaseModel):
     items: list[str]
+
 
 @router.post("/carrinhos")
 def create_cart(
