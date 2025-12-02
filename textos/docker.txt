@@ -106,3 +106,17 @@ docker compose exec backend pytest
 
 
 E seus testes vão usar o PostgreSQL Docker, não o da sua máquina.
+
+
+--------------
+Reverse branchs
+🔄 Caso se arrependa depois
+Se ainda não fez push, pode desfazer com:
+
+bash
+git reset --hard HEAD~1
+Se já fez push, use:
+
+bash
+git revert -m 1 <hash_do_merge>
+Isso cria um commit que desfaz o merge sem apagar o histórico.
