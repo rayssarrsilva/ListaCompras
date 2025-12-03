@@ -2,10 +2,10 @@ import sys
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from models import Base
-from database import engine
-from routes.auth import router as auth_router
-from routes.carts import router as cart_router
+from backend.models import Base
+from backend.database import engine
+from backend.routes.auth import router as auth_router
+from backend.routes.carts import router as cart_router
 
 backend_dir = os.path.dirname(os.path.abspath(__file__))
 if backend_dir not in sys.path:
