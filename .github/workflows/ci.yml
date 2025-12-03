@@ -27,7 +27,6 @@ jobs:
           --health-retries=5
 
     steps:
-
       - name: Checkout código
         uses: actions/checkout@v4
 
@@ -41,7 +40,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install flake8
+          pip install flake8 pytest
 
       - name: Rodar flake8 (lint)
         working-directory: backend
@@ -49,13 +48,13 @@ jobs:
           flake8 . --max-line-length=120
 
       - name: Rodar testes (pytest)
-        working-directory: backend
         env:
+          PYTHONPATH: ${{ github.workspace }}/backend
           DATABASE_URL: postgresql://postgres:123@localhost:5432/listacompras_test
           TEST_DATABASE_URL: postgresql://postgres:123@localhost:5432/listacompras_test
           SECRET_KEY: "testingkey"
         run: |
-          pytest -q --disable-warnings --maxfail=1
+          python -m pytest backend/tests/ -q --disable-warnings --maxfail=1
 
       - name: Testar build do Docker (backend e frontend)
         run: |

@@ -3,9 +3,9 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
-from backend.models import Base
-from backend.main import app
-from backend.database import get_db
+from models import Base
+from main import app
+from database import get_db
 
 # -----------------------------
 # BANCO EXCLUSIVO DE TESTE
