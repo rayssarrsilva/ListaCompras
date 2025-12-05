@@ -286,10 +286,12 @@ Este projeto foi desenvolvido para rodar **gratuitamente** no **AWS Free Tier** 
 **    Suba a aplicação
 **   docker-compose up --build -d
 
-▶️ **[Assista ao sistema em ação](![listacompras](https://github.com/user-attachments/assets/817a109e-32a6-457a-b2fb-38dff54b55f7)
-)**
+▶️ **[Assista ao sistema em ação]**
+![listacompras](https://github.com/user-attachments/assets/026b500c-f04d-4087-8f69-4e1e6b3b15a1)
+
 
 > Nota: os serviços estão atualmente **parados** para evitar consumo desnecessário, mas podem ser reiniciados em minutos com 2 comandos (docker-compose down
 docker-compose up -d --build, no terminal EC2 da AWS); Rota publica: http://18.222.232.176:5000
+
 
 
