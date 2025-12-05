@@ -150,6 +150,20 @@ def add_bulk(cart_id):
                            headers=get_auth_headers())
     return redirect(url_for("index"))
 
+@app.route("/api/itens/<int:item_id>", methods=["DELETE"])
+@login_required
+def delete_item_api(item_id):
+    response = requests.delete(
+        f"{BACKEND_URL}/api/itens/{item_id}",
+        headers=get_auth_headers()
+    )
+    if response.status_code == 200:
+        return jsonify(response.json())
+    elif response.status_code == 404:
+        return jsonify({"error": "Item não encontrado"}), 404
+    else:
+        return jsonify({"error": "Erro ao deletar item"}), 500
+    
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host="0.0.0.0", port=port) #produção

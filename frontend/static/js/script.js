@@ -1,8 +1,5 @@
-// Configuração da API
-const API_BASE_URL = "http://localhost:8000";
-
-// Conjunto de carrinhos selecionados
-let selectedCarts = new Set();
+// Não definimos API_BASE_URL — usamos as rotas do Flask como proxy
+const API_BASE_URL = "";
 
 // Helper para obter token de autenticação
 function getAuthToken() {
@@ -49,11 +46,8 @@ function toggleSelect(cartId, cartName) {
     }
 }
 
-// Mostrar/esconder itens simples (não usado, mas mantido)
-function toggleItemList(cartId) {
-    const itemsDiv = document.getElementById(`items-${cartId}`);
-    itemsDiv.style.display = itemsDiv.style.display === 'none' ? 'block' : 'none';
-}
+// Conjunto de carrinhos selecionados
+let selectedCarts = new Set();
 
 // Finalizar carrinho
 function finalizeSelection(cartId) {
@@ -81,87 +75,16 @@ function showPopup(message) {
     }, 3000);
 }
 
-// Ações da navbar (não usada atualmente, mas mantida)
-function handleNavAction(action) {
-    if (selectedCarts.size === 0) {
-        showPopup("⚠️ Selecione um carrinho antes de realizar esta ação!");
-        return;
-    }
-
-    const cartId = Array.from(selectedCarts)[0];
-
-    if (action === "view") {
-        window.location.href = "/cart/" + cartId;
-    } else if (action === "edit") {
-        window.location.href = "/edit/" + cartId;
-    } else if (action === "delete") {
-        const skipConfirm = localStorage.getItem("skipDeleteConfirm");
-        if (skipConfirm === "true") {
-            confirmDelete(cartId);
-            return;
-        }
-
-        const confirmBox = document.createElement("div");
-        confirmBox.className = "popup-confirm";
-        confirmBox.innerHTML = `
-            <p>Tem certeza que deseja deletar este carrinho?</p>
-            <label><input type="checkbox" id="skipConfirm"> Não mostrar este aviso novamente</label>
-            <div class="actions">
-                <button onclick="confirmDelete(${cartId})">Sim</button>
-                <button onclick="cancelDelete(this)">Cancelar</button>
-            </div>
-        `;
-        document.body.appendChild(confirmBox);
-    }
-}
-
-// Confirmar exclusão de carrinho
-function confirmDelete(cartId) {
-    const skip = document.getElementById("skipConfirm")?.checked;
-    if (skip) localStorage.setItem("skipDeleteConfirm", "true");
-
-    fetch(`${API_BASE_URL}/api/carrinhos/${cartId}`, { 
-        method: "DELETE",
-        headers: {
-            'Authorization': `Bearer ${getAuthToken()}`
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            showPopup(`🗑️ Carrinho deletado com sucesso!`);
-            finalizeSelection(cartId);
-            setTimeout(() => location.reload(), 1000);
-        } else {
-            if (response.status === 401) {
-                showPopup('🔒 Sessão expirada. Faça login novamente.');
-                setTimeout(() => window.location.href = '/login', 2000);
-            } else {
-                showPopup("❌ Erro ao deletar carrinho.");
-            }
-        }
-    })
-    .catch(() => showPopup("❌ Erro de conexão com o servidor."));
-
-    cancelDelete(document.querySelector(".popup-confirm .actions button:last-child"));
-}
-
-// Cancelar exclusão
-function cancelDelete(el) {
-    el.closest(".popup-confirm").remove();
-}
-
-// Abrir pergaminho com itens (SEM DUPLICAÇÃO)
-// Abrir pergaminho com itens (CORRIGIDA)
+// Abrir pergaminho com itens (AGORA CHAMA O FLASK, NÃO O FASTAPI DIRETAMENTE)
 function abrirPergaminho(cartId) {
     const modal = document.getElementById('pergaminho-modal');
     const overlay = document.getElementById('pergaminho-overlay');
     const lista = document.getElementById('lista-itens-modal');
     const som = document.getElementById('som-pergaminho');
 
-    // Limpa a lista e mostra loading
     lista.innerHTML = '<li style="text-align:center; color:#3e2f1c; font-style:italic;">Carregando...</li>';
 
-    fetch(`${API_BASE_URL}/api/carrinhos/${cartId}/itens`, {
+    fetch(`/api/carrinhos/${cartId}/itens`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${getAuthToken()}`
@@ -173,7 +96,6 @@ function abrirPergaminho(cartId) {
     })
     .then(data => {
         lista.innerHTML = '';
-        
         if (data.length === 0) {
             lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
         } else {
@@ -200,7 +122,7 @@ function abrirPergaminho(cartId) {
     });
 }
 
-// Deletar item específico (COM AUTENTICAÇÃO E URL CORRETA)
+// Deletar item específico (CHAMA O FLASK)
 function deletarItem(itemId, liElement) {
     if (!confirm('Tem certeza que deseja deletar este item?')) return;
 
@@ -211,7 +133,7 @@ function deletarItem(itemId, liElement) {
         return;
     }
 
-    fetch(`${API_BASE_URL}/api/itens/${itemId}`, { 
+    fetch(`/api/itens/${itemId}`, { 
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -221,7 +143,6 @@ function deletarItem(itemId, liElement) {
         if (res.ok) {
             liElement.remove();
             showPopup('✅ Item deletado!');
-            
             const lista = document.getElementById('lista-itens-modal');
             if (lista && lista.children.length === 0) {
                 lista.innerHTML = '<li style="text-align:center; color:#3e2f1c;">Nenhum item encontrado</li>';
@@ -264,7 +185,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Expõe funções globais
 window.toggleSelect = toggleSelect;
-window.toggleItemList = toggleItemList;
 window.finalizeSelection = finalizeSelection;
-window.handleNavAction = handleNavAction;
 window.abrirPergaminho = abrirPergaminho;

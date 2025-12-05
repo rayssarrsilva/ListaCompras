@@ -31,6 +31,7 @@ app.include_router(cart_router, prefix="/api")
 def root():
     return {"message": "API ListaCompras está rodando 🚀"}
 
+
 if __name__ == "__main__":
     import uvicorn
     import os

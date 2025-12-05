@@ -31,3 +31,23 @@ pip3 install -r requirements.txt
 ----------------
 ✅ Depois disso, sempre que for rodar o app, ative o ambiente virtual primeiro com:
 : source venv/bin/activate
+---------------------
+Definir as variaveis de ambiente
+
+export DATABASE_URL="postgresql://postgres:NyS3HSkklRtIkuod@listacompras-db.c32gauo20gy1.us-east-2.rds.amazonaws.com:5432/postgres"
+export SECRET_KEY="listacompras"
+
+git clone https://github.com/rayssarrsilva/ListaCompras.git 
+cd ListaCompras
+cd ~/ListaCompras
+
+✅ Use a mesma senha do Postgres que está no seu docker-compose.yml.
+
+SECRET_KEY=v3CRWdfVwd8GTGDcF6H4hmzCLlSDpsIcV4JuEkyBmQk
+DATABASE_URL=postgresql://postgres:123@postgres:5432/listacompras
+
+---------------------
+cd ~/ListaCompras
+git pull
+docker-compose down
+docker-compose up -d --build
