@@ -1,0 +1,33 @@
+senha: Rays64p50
+rds listacomoras-db: NyS3HSkklRtIkuod
+nome: postgres
+
+-----------------
+🔹 ETAPA 1: Criar o PostgreSQL no RDS (Free Tier) CHECK (ec2 regra de negocio tcp port ip4 configurada TBM)
+🔹 ETAPA 2: Criar uma instância EC2 (Free Tier) para rodar backend + frontend FEITO
+🔹 ETAPA 3: Conectar na EC2 e instalar tudo
+🔹 ETAPA 4: Ajustar seu código para usar o RDS (não Supabase)
+🔹 ETAPA 5: Iniciar os apps e testar
+------------------
+
+https://github.com/rayssarrsilva/ListaCompras.git
+# Atualizar sistema
+sudo apt update -y && sudo apt upgrade -y
+
+# Instalar Python, pip, git
+sudo apt install python3 python3-pip git -y
+
+# Clonar seu projeto
+git clone https://github.com/rayssarrsilva/ListaCompras.git
+cd ListaCompras
+
+# Instalar backend
+cd backend
+pip3 install -r requirements.txt
+
+# Instalar frontend
+cd ../frontend
+pip3 install -r requirements.txt
+----------------
+✅ Depois disso, sempre que for rodar o app, ative o ambiente virtual primeiro com:
+: source venv/bin/activate
