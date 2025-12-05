@@ -219,3 +219,18 @@ O backend usa --reload (Uvicorn), então reinicia automaticamente ao salvar arqu
 Para ver logs em tempo real:
 docker compose logs -f
 
+---
+## 🌐 Deploy na AWS (Free Tier)
+
+Este projeto foi implantado na AWS usando:
+- **EC2** (Ubuntu 22.04, t3.micro)
+- **RDS** (PostgreSQL 15, db.t3.micro)
+- **Docker Compose** para orquestração
+- Tudo rodando dentro do **Free Tier de 12 meses**
+
+✅ **Zero custo** — e totalmente reproduzível.
+
+▶️ **[Assista ao sistema em ação](link-do-seu-video.mp4)**
+
+> Nota: os serviços estão atualmente **parados** para evitar consumo desnecessário, mas podem ser reiniciados em minutos com 2 comandos (docker-compose down
+docker-compose up -d --build, no terminal EC2 da AWS).
