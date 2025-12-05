@@ -13,7 +13,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+BACKEND_URL = os.getenv("FASTAPI_BASE_URL", "http://backend:8000")
 
 class User(UserMixin):
     def __init__(self, user_id):

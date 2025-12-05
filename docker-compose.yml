@@ -50,7 +50,7 @@ services:
     volumes:
       - ./frontend:/app
     environment:
-      FASTAPI_BASE_URL: http://backend:8000
+      BACKEND_URL: http://backend:8000
       SECRET_KEY: ${SECRET_KEY}   # ESSA LINHA FALTAVA — ERA O PROBLEMA
 
 volumes:

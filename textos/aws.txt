@@ -51,3 +51,8 @@ cd ~/ListaCompras
 git pull
 docker-compose down
 docker-compose up -d --build
+
+----
+✅ Seu IP público: 18.222.232.176
+rotas
+http://18.222.232.176:5000
