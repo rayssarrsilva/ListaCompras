@@ -1,0 +1,5 @@
+qXsltOPI66mk2NPs
+listacompras
+
+postgresql://postgres:[qXsltOPI66mk2NPs]@db.mvfyaouzjcwstcqwjijm.supabase.co:5432/postgres
+https://supabase.com/dashboard/project/mvfyaouzjcwstcqwjijm?showConnect=true

@@ -30,3 +30,12 @@ app.include_router(cart_router, prefix="/api")
 @app.get("/")
 def root():
     return {"message": "API ListaCompras está rodando 🚀"}
+
+# Adicione isto no FINAL do backend/main.py
+if __name__ == "__main__":
+    import uvicorn
+    import os
+
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+    

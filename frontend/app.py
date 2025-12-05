@@ -13,7 +13,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-FASTAPI_BASE_URL = os.getenv("FASTAPI_BASE_URL", "http://backend:8000")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -40,7 +40,7 @@ def login():
     print(f"🔍 Tentando login: {username}")
     
     try:
-        response = requests.post(f"{FASTAPI_BASE_URL}/api/login",
+        response = requests.post(f"{BACKEND_URL}/api/login",
                                json={"username": username, "password": password},
                                timeout=10)
         print(f"🔍 Resposta API - Status: {response.status_code}")
@@ -70,7 +70,7 @@ def login():
 def register():
     if request.method == 'POST':
         try:
-            resp = requests.post(f"{FASTAPI_BASE_URL}/api/register",
+            resp = requests.post(f"{BACKEND_URL}/api/register",
                                json={'username': request.form['username'], 
                                      'password': request.form['password']},
                                timeout=10)
@@ -94,7 +94,7 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    response = requests.get(f"{FASTAPI_BASE_URL}/api/carrinhos",
+    response = requests.get(f"{BACKEND_URL}/api/carrinhos",
                            headers=get_auth_headers())
     carts = response.json() if response.status_code == 200 else []
     return render_template("index.html", carts=carts, selected_cart=None)
@@ -103,7 +103,7 @@ def index():
 @login_required
 def create_cart():
     cart_name = request.form["cart_name"]
-    response = requests.post(f"{FASTAPI_BASE_URL}/api/carrinhos",
+    response = requests.post(f"{BACKEND_URL}/api/carrinhos",
                            json={"name": cart_name},
                            headers=get_auth_headers())
     return redirect(url_for("index"))
@@ -111,7 +111,7 @@ def create_cart():
 @app.route("/delete/<int:cart_id>", methods=["POST"])
 @login_required
 def delete_cart(cart_id):
-    response = requests.delete(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}",
+    response = requests.delete(f"{BACKEND_URL}/api/carrinhos/{cart_id}",
                               headers=get_auth_headers())
     return redirect(url_for("index"))
 
@@ -126,7 +126,7 @@ def select_cart():
 @login_required
 def add_to_cart(cart_id):
     name = request.form["name"]
-    response = requests.post(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}/itens",
+    response = requests.post(f"{BACKEND_URL}/api/carrinhos/{cart_id}/itens",
                            json={"name": name},
                            headers=get_auth_headers())
     return redirect(url_for("index"))
@@ -134,7 +134,7 @@ def add_to_cart(cart_id):
 @app.route("/api/carrinhos/<int:cart_id>/itens")
 @login_required
 def get_cart_items(cart_id):
-    response = requests.get(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}/itens",
+    response = requests.get(f"{BACKEND_URL}/api/carrinhos/{cart_id}/itens",
                            headers=get_auth_headers())
     if response.status_code == 200:
         return jsonify(response.json())
@@ -145,10 +145,11 @@ def get_cart_items(cart_id):
 def add_bulk(cart_id):
     items_raw = request.form["items"]
     item_names = [name.strip() for name in items_raw.split(",") if name.strip()]
-    response = requests.post(f"{FASTAPI_BASE_URL}/api/carrinhos/{cart_id}/bulk",
+    response = requests.post(f"{BACKEND_URL}/api/carrinhos/{cart_id}/bulk",
                            json={"items": item_names},
                            headers=get_auth_headers())
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=port) #produção
