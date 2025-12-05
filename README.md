@@ -265,30 +265,31 @@ Este projeto foi desenvolvido para rodar **gratuitamente** no **AWS Free Tier** 
      ```
 
 3. **Na instância EC2, execute os comandos abaixo:**
-   # Atualize o sistema
-   sudo apt update && sudo apt upgrade -y
+**    Atualize o sistema
+**   sudo apt update && sudo apt upgrade -y
 
-   # Instale Docker e Docker Compose
-   sudo apt install -y docker.io docker-compose
+**    Instale Docker e Docker Compose
+**   sudo apt install -y docker.io docker-compose
 
-   # Adicione seu usuário ao grupo docker (para rodar sem sudo)
-   sudo usermod -aG docker $USER
+**    Adicione seu usuário ao grupo docker (para rodar sem sudo)
+**   sudo usermod -aG docker $USER
    newgrp docker  # ou reinicie a sessão SSH
 
-   # Clone o projeto
-   git clone https://github.com/seu-usuario/lista-compras.git
+**    Clone o projeto
+**   git clone https://github.com/seu-usuario/lista-compras.git
    cd lista-compras
 
-   # Crie e edite o arquivo .env
-   cp .env.example .env
+**    Crie e edite o arquivo .env
+**   cp .env.example .env
    nano .env  # preencha com suas credenciais
 
-   # Suba a aplicação
-   docker-compose up --build -d
+**    Suba a aplicação
+**   docker-compose up --build -d
 
 ▶️ **[Assista ao sistema em ação](![listacompras](https://github.com/user-attachments/assets/817a109e-32a6-457a-b2fb-38dff54b55f7)
 )**
 
 > Nota: os serviços estão atualmente **parados** para evitar consumo desnecessário, mas podem ser reiniciados em minutos com 2 comandos (docker-compose down
 docker-compose up -d --build, no terminal EC2 da AWS); Rota publica: http://18.222.232.176:5000
+
 
