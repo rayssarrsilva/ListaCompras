@@ -220,7 +220,7 @@ Para ver logs em tempo real:
 docker compose logs -f
 
 ---
-## 🌐 Deploy na AWS (Free Tier)
+## 🌐 AWS 
 
 Este projeto foi implantado na AWS usando:
 - **EC2** (Ubuntu 22.04, t3.micro)
@@ -230,7 +230,65 @@ Este projeto foi implantado na AWS usando:
 
 ✅ **Zero custo** — e totalmente reproduzível.
 
-▶️ **[Assista ao sistema em ação](link-do-seu-video.mp4)**
+---
+## ☁️ Deploy na AWS (EC2 + RDS)
+
+Este projeto foi desenvolvido para rodar **gratuitamente** no **AWS Free Tier** (12 meses), aproveitando apenas recursos elegíveis para a camada gratuita:
+
+- **EC2**: instância `t2.micro` (750h/mês gratuitas)  
+- **RDS**: banco PostgreSQL `db.t3.micro` (750h/mês + 20 GB de armazenamento gratuito)
+
+### Passos para deploy
+
+1. **Crie uma instância EC2 (Ubuntu 22.04 LTS)**
+   - Tipo de instância: `t2.micro`
+   - Chave SSH: salve em local seguro
+   - **Security Group** (regras de entrada):
+     - Tipo: **SSH**, Porta: `22`, Origem: `Seu IP` ou `0.0.0.0/0` (temporário)
+     - Tipo: **Custom TCP**, Porta: `5000`, Origem: `0.0.0.0/0`
+     - Tipo: **Custom TCP**, Porta: `8000`, Origem: `0.0.0.0/0`
+
+2. **(Opcional, mas recomendado) Crie um banco de dados RDS PostgreSQL**
+   - Engine: **PostgreSQL 15**
+   - Tipo de instância: `db.t3.micro`
+   - Configuração:
+     - **Publicly accessible**: `No` (mais seguro)
+     - **VPC**: mesma da EC2
+     - **Security Group do RDS**: permita tráfego de entrada na porta `5432` **apenas da EC2**
+   - Após criado, atualize seu `.env` com o endpoint do RDS:
+     ```env
+     POSTGRES_HOST=listacompras-db.c32gauo20gy1.us-east-2.rds.amazonaws.com
+     POSTGRES_PORT=5432
+     POSTGRES_USER=seu_usuario
+     POSTGRES_PASSWORD=sua_senha_forte
+     POSTGRES_DB=listacompras
+     ```
+
+3. **Na instância EC2, execute os comandos abaixo:**
+   # Atualize o sistema
+   sudo apt update && sudo apt upgrade -y
+
+   # Instale Docker e Docker Compose
+   sudo apt install -y docker.io docker-compose
+
+   # Adicione seu usuário ao grupo docker (para rodar sem sudo)
+   sudo usermod -aG docker $USER
+   newgrp docker  # ou reinicie a sessão SSH
+
+   # Clone o projeto
+   git clone https://github.com/seu-usuario/lista-compras.git
+   cd lista-compras
+
+   # Crie e edite o arquivo .env
+   cp .env.example .env
+   nano .env  # preencha com suas credenciais
+
+   # Suba a aplicação
+   docker-compose up --build -d
+
+▶️ **[Assista ao sistema em ação](![listacompras](https://github.com/user-attachments/assets/817a109e-32a6-457a-b2fb-38dff54b55f7)
+)**
 
 > Nota: os serviços estão atualmente **parados** para evitar consumo desnecessário, mas podem ser reiniciados em minutos com 2 comandos (docker-compose down
-docker-compose up -d --build, no terminal EC2 da AWS).
+docker-compose up -d --build, no terminal EC2 da AWS); Rota publica: http://18.222.232.176:5000
+
