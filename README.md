@@ -3,8 +3,8 @@
 ▶️ **[Assista ao sistema em ação]**
 ![listacompras](https://github.com/user-attachments/assets/026b500c-f04d-4087-8f69-4e1e6b3b15a1)
 
-Aplicação web para gerenciar **carrinhos de compras**, construída com **Flask**, **SQLAlchemy**, **PostgreSQL** e **HTML/CSS/JavaScript**.  
-Permite criar, visualizar, editar e deletar carrinhos, além de adicionar itens individualmente ou em lote.
+Aplicação web para gerenciar **carrinhos de compras**, construída com **Flask** para frontend, **FastAPI** para backend, **SQLAlchemy**, **PostgreSQL* para uso local, **Docker** para uso local e remoto (aws) e **HTML/CSS/JavaScript**.  
+Permite criar, visualizar, editar e deletar carrinhos, além de adicionar itens individualmente ou em lote e deletar o item selecionado no carrinho desejado
 
 ---
 
@@ -292,6 +292,7 @@ Este projeto foi desenvolvido para rodar **gratuitamente** no **AWS Free Tier** 
 
 > Nota: os serviços estão atualmente **parados** para evitar consumo desnecessário, mas podem ser reiniciados em minutos com 2 comandos (docker-compose down
 docker-compose up -d --build, no terminal EC2 da AWS); Rota publica: http://18.222.232.176:5000
+
 
 
 
